@@ -45,6 +45,18 @@ if page:
         if not d: continue
         sub = "icons" if f.startswith("icon_") else ""
         n += save(os.path.join(REF, "canon_manual", sub, f), d)
-print("body, kit lens and manual files:", n)
+# Speedlite EL-100 gallery (Canon UK store, product 3249C003)
+k = 0
+for b in ("3249C003_Flash-SPEEDLITE-EL-100", "3249C003_Speedlite-EL-100-Flash", "3249C003_SPEEDLITE"):
+    for sfx in [""] + ["_%02d" % i for i in range(1, 9)]:
+        d = get("https://i1.adis.ws/i/canon/" + b + sfx + Q.format(w=1400))
+        if d and len(d) > 2000: k += 1; n += save(os.path.join(REF, "speedlite_el-100", "el100_%02d.webp" % k), d)
+# battery/card diagrams from the manual's Inserting/Removing page
+pg = get(MAN + "UG-01_Preparations_0030.html")
+if pg:
+    for f in sorted(set(re.findall(r'src="screens/(UG-01_i\d+\.png)"', pg.decode("utf-8", "replace")))):
+        d = get(MAN + "screens/" + f)
+        if d: n += save(os.path.join(REF, "canon_manual", f), d)
+print("body, kit lens, Speedlite and manual files:", n)
 sys.argv = ["fetch_lens_refs.py", os.path.join(REF, "lenses")]
 runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fetch_lens_refs.py"), run_name="__main__")

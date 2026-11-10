@@ -57,6 +57,8 @@
     const body = byName[P.bodyRoot], lensRoot = byName[P.lensRoots.kit];
     if (!body) throw new Error('The camera model is missing ' + P.bodyRoot + '.');
     const root = new T3.Group(); root.name = 'R100'; root.scale.setScalar(100); root.add(body);
+    // the Speedlite EL-100 accessory rides with the camera (hidden until it is added to the hot shoe)
+    const speed = byName.R100_Speedlite; if (speed) { root.add(speed); speed.visible = false; speed.userData.base = speed.position.clone(); }
 
     // part ids on meshes (registry ids); detail children inherit through partOf()
     P.parts.forEach((p) => p.meshNames.forEach((n) => { if (byName[n]) byName[n].userData.part = p.id; }));
@@ -91,11 +93,18 @@
 
     const shellMats = []; body.traverse((o) => { if (o.isMesh && SHELL.test(o.name) && !shellMats.includes(o.material)) shellMats.push(o.material); });
     const md = mot.PART_ModeDial, order = (md && md.e.ff_order) || P.modeDial, step = ((md && md.e.ff_step_deg) || -40) * Math.PI / 180;
-    const flashWin = byName.PART_BuiltInFlash_Window;
+    const flashWin = byName.PART_BuiltInFlash_Window, XA = new T3.Vector3(1, 0, 0), SLIDE = new T3.Vector3(0, 0.012, -0.045); // from behind and above
+    // orientation guides shown beside the battery and card once they are out (Canon manual, Inserting the Battery and Card)
+    const guides = [
+      { anchor: byName.ANCHOR_Battery_Contacts, text: 'Contacts end goes in first', show: (c) => c.batOut > 0.92 },
+      { anchor: byName.ANCHOR_Card, text: 'Label faces the front of the camera', show: (c) => c.cardOut > 0.92 },
+      { anchor: byName.ANCHOR_Card_Contacts, text: '9 contacts face the back, cut corner leads', show: (c) => c.cardOut > 0.92 },
+      { anchor: byName.ANCHOR_Speedlite_Head, text: 'Head tilts up for bounce flash', show: (c) => c.speed > 0.95 && c.bounce < 0.1 },
+    ].filter((g) => g.anchor);
     const pressT = {};
     const A = {
       glb: true, url: gltf.userData.url, units, shellMats, anchors, byName, lcd: disp, mot,
-      flashGlass: flashWin, mount: new T3.Vector3(), modeOrder: order,
+      flashGlass: flashWin, mount: new T3.Vector3(), modeOrder: order, guides, speedlite: speed, speedWin: byName.PART_Speedlite_Window,
       press(name) { pressT[name] = 0.16; },
       pose(cur, dt) {
         rot(mot.PART_BuiltInFlash, cur.flash * -0.95);
@@ -106,8 +115,21 @@
         rot(mot.PART_PowerSwitch, cur.power > 0.5 ? 0.14 : -0.14);
         slide(mot.PART_ShutterButton, -cur.press * 0.0007);
         // battery and card drop out a little when the door opens (and stay put in the exploded view)
-        if (mot.PART_Battery) mot.PART_Battery.o.position.y = mot.PART_Battery.o.userData.base.y - 0.015 * cur.door * (1 - cur.explode) + mot.PART_Battery.o.userData.ex.y * cur.explode;
-        if (mot.PART_Card) mot.PART_Card.o.position.y = mot.PART_Card.o.userData.base.y - 0.008 * cur.door * (1 - cur.explode) + mot.PART_Card.o.userData.ex.y * cur.explode;
+        // battery and card come all the way out: down through the open door, then forward to face the viewer
+        const out = (m, k, down, fwd, side, turn) => {
+          if (!m) return; const o = m.o, b = o.userData.base, ex = o.userData.ex, a = Math.min(1, k * 2), c = Math.max(0, k * 2 - 1);
+          const e = (t) => t * t * (3 - 2 * t);
+          o.position.set(b.x + side * e(c) + ex.x * cur.explode, b.y - down * e(a) - 0.008 * e(c) + ex.y * cur.explode, b.z + fwd * e(c) + ex.z * cur.explode);
+          o.quaternion.copy(m.q0); if (turn) { q.setFromAxisAngle(XA, turn * e(c)); o.quaternion.premultiply(q); }
+        };
+        out(mot.PART_Battery, cur.batOut, 0.066, 0.07, -0.004, -0.35);
+        out(mot.PART_Card, cur.cardOut, 0.05, 0.05, 0.032, 0);
+        // Speedlite: slides into the shoe from the back; its head tilts for bounce
+        if (speed) {
+          const k = cur.speed; speed.visible = k > 0.01; const e = k * k * (3 - 2 * k);
+          speed.position.copy(speed.userData.base).add(SLIDE.clone().multiplyScalar(1 - e));
+          rot(mot.PART_Speedlite_Head, cur.bounce * -Math.PI / 2);
+        }
         Object.keys(pressT).forEach((n) => { const m = mot[n]; pressT[n] -= dt; if (m) slide(m, pressT[n] > 0 ? (m.e.ff_range ? m.e.ff_range[1] : 0.0005) : 0); if (pressT[n] <= 0) delete pressT[n]; });
         return Object.keys(pressT).length > 0;
       },

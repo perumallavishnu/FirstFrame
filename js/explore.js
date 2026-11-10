@@ -29,7 +29,8 @@
     const tg = {};
     const tog = (id, label, fn) => { const b = h('button', { class: 'btn sm tog', type: 'button', 'aria-pressed': 'false', onclick: () => { fn(); sync(); } }, label); tg[id] = b; return b; };
     const toggles = h('div', { class: 'row' },
-      tog('power', 'Power', () => act('power')), tog('flash', 'Flash', () => act('flash')), tog('door', 'Card & battery door', () => act('door')), tog('cover', 'Terminal covers', () => { act('terminals'); act('terminals2'); }),
+      tog('power', 'Power', () => act('power')), tog('flash', 'Built-in flash', () => act('flash')), tog('speedlite', 'Speedlite EL-100', () => E.api.speedlite && E.api.speedlite()), tog('door', 'Card & battery door', () => act('door')), tog('cover', 'Terminal covers', () => { act('terminals'); act('terminals2'); }),
+      tog('batOut', 'Battery out', () => E.api.takeOut && E.api.takeOut('battery')), tog('cardOut', 'Card out', () => E.api.takeOut && E.api.takeOut('card')),
       tog('xray', 'X-ray', () => E.api.set('xray', !E.api.st.xray)), tog('hotspots', 'Labels', () => E.api.set('hotspots', !E.api.st.hotspots)),
       h('button', { class: 'btn sm', type: 'button', onclick: () => act('shutterbtn') }, 'Press shutter'), tog('lens', 'Detach lens', () => { const s = E.api.lensState(); if (s.state === 'mounted') E.api.detach(); else if (s.state === 'free') E.api.attach(); }));
     const exV = h('span', { class: 'mono' }, '0%');
@@ -88,7 +89,7 @@
     }
     function sync() {
       const a = E.api; if (!a) return; const s = a.lensState(), l = FF.lensById(s.id);
-      const on = { power: FF.menu.power, flash: a.tgt.flash > 0.5, door: a.tgt.door > 0.5, cover: a.tgt.cover > 0.5, xray: a.st.xray, hotspots: a.st.hotspots, lens: s.state !== 'mounted' };
+      const on = { power: FF.menu.power, flash: a.tgt.flash > 0.5, door: a.tgt.door > 0.5, cover: a.tgt.cover > 0.5, speedlite: a.tgt.speed > 0.5, batOut: a.tgt.batOut > 0.5, cardOut: a.tgt.cardOut > 0.5, xray: a.st.xray, hotspots: a.st.hotspots, lens: s.state !== 'mounted' };
       Object.keys(tg).forEach((k) => tg[k].setAttribute('aria-pressed', String(!!on[k])));
       tg.lens.textContent = s.state === 'mounted' ? 'Detach lens' : 'Attach lens';
       if (l) { const f = l.fmin + (l.fmax - l.fmin) * a.st.zoomK, r = P.apertureRange(l, f); zoom.disabled = l.fmin === l.fmax; zoom.value = Math.round(a.st.zoomK * 100); zoomV.textContent = Math.round(f) + ' mm'; ap.max = r[1] - r[0]; const ai = Math.max(r[0], Math.min(r[1], P.apertureIndex(a.st.N))); ap.value = ai - r[0]; apV.textContent = 'f/' + P.APERTURE_LABELS[ai]; if (Math.abs(P.apertureValue(ai) - a.st.N) > 0.01) a.setAperture(P.apertureValue(ai)); }
@@ -107,6 +108,7 @@
 
     FF.cam3d.create(stage, { lcd }).then((api) => {
       E.api = api; stage.querySelector('.c3d-loading').remove(); fillParts();
+      if (api.model !== 'glb') ['speedlite', 'batOut', 'cardOut'].forEach((k) => { if (tg[k]) tg[k].hidden = true; }); // detailed model only
       if (api.model !== 'glb') stage.append(h('div', { class: 'c3d-note small' }, 'Showing the simplified teaching model (the detailed EOS R100 model did not load).'));
       api.on.select = showInfo; api.on.lens = sync; api.on.state = sync;
       if (FF.Renderer && FF.Renderer.ok && FF.sim && FF.sim.makeThumb) { try { FF.menu.liveSrc = FF.sim.makeThumb(FF.cam.state.scene); } catch (e) { /* no preview */ } }

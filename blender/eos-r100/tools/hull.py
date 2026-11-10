@@ -136,6 +136,9 @@ def main(mdir, out, vox=0.25):
         canvas = Image.new("L", (2000, 2000), 0); ImageDraw.Draw(canvas).polygon([tuple(p) for p in poly], fill=255)
         return view_field(np.asarray(canvas) > 127, cal, xs, ys, zs, smooth=0.1)
     GAP = 0.35
+    # 0.4 mm smoothing of the whole field: removes the 0.25 mm voxel stair-steps that glossy reflections turned into
+    # visible ripples, while real edges (fillets of several mm) survive
+    sdf = ndi.gaussian_filter(sdf, sigma=0.4 / vox).astype(np.float32)
     base = sdf.copy()
     parts = {}
     def skin(R, t): return np.maximum(np.maximum(base, R), -(base + t))
@@ -157,6 +160,24 @@ def main(mdir, out, vox=0.25):
     parts["BODY_Leatherette"] = skin(np.maximum(R, 34.2 - X), 0.8)   # same covering across the rest of the front
     for name, f in parts.items():
         sdf = np.maximum(sdf, GAP - f)  # shell minus each panel grown by the seam gap
+
+    # ---- cavities that become visible when doors open ----
+    def box(x0, x1, y0, y1, z0, z1):
+        r = np.maximum(x0 - X, X - x1)
+        for t in (y0 - Y, Y - y1, z0 - Z, Z - z1): r = np.maximum(r, t)
+        return r
+    # battery chamber for the LP-E17 (33.0 x 14.0 x 49.4 mm, contacts up) and the SD slot behind it (card label faces
+    # the front, Canon manual "Inserting/Removing the Battery and Card"); both open onto the card/battery door
+    sdf = np.maximum(sdf, -box(8.2, 41.8, 19.3, 34.1, -2, 51.2))
+    sdf = np.maximum(sdf, -box(14.2, 39.8, 36.0, 38.9, -2, 34.0))
+    # port bays: a 2.8 mm deep recess under each terminal cover, so an open cover shows the sockets in their well
+    def bay(view, polys, half):
+        pr = None
+        for poly in polys:
+            f = poly_field(view, poly); pr = f if pr is None else np.minimum(pr, f)
+        return np.maximum(np.maximum(np.maximum(pr, half), base), -(base + 2.8))
+    sdf = np.maximum(sdf, -bay("right", [panels["terminal-cover-right"]["poly"]], X - 20.0))
+    sdf = np.maximum(sdf, -bay("left", [panels["terminal-cover-left-mic"]["poly"], panels["terminal-cover-left-remote"]["poly"]], 96.0 - X))
     parts["BODY_Shell"] = sdf
 
     manifest = {"voxel_mm": vox, "parts": {}}

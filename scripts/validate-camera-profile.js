@@ -31,9 +31,12 @@ for (const n of nodes) {
   if (!n.startsWith('PART_')) continue;
   if (meshOwners.has(n)) continue;
   if (DETAIL.test(n) && meshOwners.has(n.replace(DETAIL, ''))) continue;
+  if ([...meshOwners].some((m) => n.startsWith(m + '_'))) continue; // detail child of a registered part (slots, tongues, pieces)
   errs.push(`GLB node ${n} has no registry part`);
 }
-const stray = [...nodes].filter((n) => n.startsWith('ANCHOR_') && !anchors.has(n) && !/^ANCHOR_CrossKeys_/.test(n));
+// per-lens anchors (ANCHOR_<Part>__<lens>) and guide anchors are expected extras, not selectable parts
+const EXTRA = /^ANCHOR_(CrossKeys_\w+|\w+__\w+|Battery_Contacts|Card_Contacts|Speedlite_Head|ThumbRest)$/;
+const stray = [...nodes].filter((n) => n.startsWith('ANCHOR_') && !anchors.has(n) && !EXTRA.test(n));
 if (stray.length) warns.push('anchors in GLB without a registry part (not selectable): ' + stray.join(', '));
 console.log(`${url}: ${P.parts.length} parts, ${anchors.size} anchors, ${nodes.size} nodes, ${(glb.length / 1e6).toFixed(2)} MB`);
 warns.forEach((w) => console.log('  warn:', w));
