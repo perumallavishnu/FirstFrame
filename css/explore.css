@@ -1,0 +1,41 @@
+/* explore.css: 3D camera page */
+.c3d-panel { margin-top: 16px; }
+.c3d-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+.c3d-left, .c3d-right { display: grid; gap: 12px; min-width: 0; }
+.c3d-bar { justify-content: space-between; gap: 8px; }
+.c3d-views { gap: 4px; }
+.c3d-stage { position: relative; border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); min-height: 260px;
+  background: radial-gradient(120% 90% at 50% 20%, #f4f6f8 0%, #cfd6dd 60%, #aab3bc 100%); }
+:root[data-theme="dark"] .c3d-stage { background: radial-gradient(120% 90% at 50% 20%, #3a424b 0%, #20262c 60%, #12161a 100%); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .c3d-stage { background: radial-gradient(120% 90% at 50% 20%, #3a424b 0%, #20262c 60%, #12161a 100%); } }
+.c3d-canvas { display: block; width: 100%; touch-action: none; cursor: grab; outline-offset: -3px; }
+.c3d-canvas.snap { outline: 3px solid var(--ok); }
+.c3d-loading { position: absolute; inset: 0; display: grid; place-items: center; color: #333; font-weight: 600; }
+.c3d-hot { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.c3d-dot { position: absolute; left: -6px; top: -6px; width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 2px solid #111; background: #fff; box-shadow: 0 0 0 1.5px rgba(255,255,255,.7), 0 1px 4px rgba(0,0,0,.45); pointer-events: auto; cursor: pointer; opacity: .88; }
+/* the dot marks the exact anchor; a larger invisible ring gives a comfortable touch target */
+.c3d-dot::before { content: ""; position: absolute; inset: -11px; border-radius: 50%; }
+.c3d-dot:hover, .c3d-dot:focus-visible { opacity: 1; scale: 1.25; } .c3d-dot.on { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent), 0 1px 6px rgba(0,0,0,.5); scale: 1.2; opacity: 1; }
+.c3d-tag { position: absolute; left: 0; top: 0; padding: 4px 9px; border-radius: 6px; background: rgba(15,18,21,.88); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; border-left: 3px solid var(--accent); pointer-events: none; }
+.c3d-tag.flip { border-left: 0; border-right: 3px solid var(--accent); }
+.c3d-note { position: absolute; left: 10px; bottom: 10px; padding: 4px 8px; border-radius: 6px; background: rgba(15,18,21,.75); color: #fff; }
+.c3d-fn { gap: 6px; margin: 6px 0; } .c3d-src a { color: inherit; }
+@media (prefers-reduced-motion: reduce) { .c3d-dot { transition: none; } }
+.t3-label { position: absolute; left: 0; top: 0; padding: 3px 8px; border-radius: 6px; background: rgba(15,18,21,.82); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; max-width: 46vw; overflow: hidden; text-overflow: ellipsis; }
+.c3d-ctl { padding: 12px; display: grid; gap: 10px; }
+.tog[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.c3d-select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: .88rem; max-width: 220px; }
+.c3d-info { padding: 16px; min-height: 150px; } .c3d-info h3 { margin: 6px 0; } .c3d-info p { margin: 6px 0; }
+.c3d-screen { padding: 12px; display: grid; gap: 10px; } .c3d-screen h4 { margin: 0; }
+.c3d-lcd { width: 100%; height: auto; border-radius: 8px; border: 6px solid #0c0d0e; background: #000; display: block; }
+.c3d-keys { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.key { min-width: 44px; min-height: 40px; font-family: var(--mono, monospace); } .key.pw { border-color: var(--ok); }
+.dpad { display: grid; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 40px); gap: 3px; }
+.dpad .u { grid-area: 1 / 2; } .dpad .l { grid-area: 2 / 1; } .dpad .c { grid-area: 2 / 2; font-size: .7rem; padding: 0; } .dpad .r { grid-area: 2 / 3; } .dpad .d { grid-area: 3 / 2; }
+.c3d-menuhelp { min-height: 4.2em; padding: 8px 10px; background: var(--surface2); border-radius: 8px; line-height: 1.45; }
+.c3d-mtabs { gap: 6px; margin-top: 8px; }
+.c3d-h { margin: 26px 0 4px; }
+.c3d-shelf { display: grid; grid-auto-flow: column; grid-auto-columns: 132px; gap: 10px; overflow-x: auto; padding: 6px 2px 12px; }
+.lensbtn { display: grid; gap: 2px; justify-items: center; padding: 8px; cursor: grab; text-align: center; font: inherit; color: inherit; }
+.lensbtn[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+@media (max-width: 900px) { .c3d-grid { grid-template-columns: 1fr; } }

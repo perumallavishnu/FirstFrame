@@ -1,0 +1,350 @@
+{
+ "_about": "Separate-panel outlines traced from the Canon photos, in full-resolution (2000 px) photo coordinates. Feed through tools/views.py CAL to get frame mm. Each panel becomes a 1.0 mm skin cut from the hull (part = shell AND prism AND outer skin; shell minus part grown by a 0.35 mm seam gap). Traced 2026-11-10; accuracy about +/-0.5 mm.",
+ "terminal-cover-right": {
+  "photo": "right",
+  "skin_mm": 1.0,
+  "poly": [
+   [
+    830,
+    858
+   ],
+   [
+    1040,
+    858
+   ],
+   [
+    1048,
+    875
+   ],
+   [
+    1050,
+    1600
+   ],
+   [
+    1035,
+    1618
+   ],
+   [
+    965,
+    1618
+   ],
+   [
+    785,
+    1465
+   ],
+   [
+    782,
+    1215
+   ],
+   [
+    800,
+    1185
+   ],
+   [
+    830,
+    1160
+   ]
+  ],
+  "seam_frame": [
+   [
+    745,
+    830
+   ],
+   [
+    1075,
+    830
+   ],
+   [
+    1082,
+    1620
+   ],
+   [
+    960,
+    1655
+   ],
+   [
+    745,
+    1490
+   ]
+  ]
+ },
+ "terminal-cover-left-mic": {
+  "photo": "left",
+  "skin_mm": 1.0,
+  "poly": [
+   [
+    915,
+    728
+   ],
+   [
+    1140,
+    728
+   ],
+   [
+    1150,
+    745
+   ],
+   [
+    1150,
+    930
+   ],
+   [
+    1035,
+    1180
+   ],
+   [
+    935,
+    1182
+   ],
+   [
+    910,
+    1160
+   ]
+  ]
+ },
+ "terminal-cover-left-remote": {
+  "photo": "left",
+  "skin_mm": 1.0,
+  "poly": [
+   [
+    1160,
+    940
+   ],
+   [
+    1275,
+    940
+   ],
+   [
+    1292,
+    960
+   ],
+   [
+    1292,
+    1340
+   ],
+   [
+    1275,
+    1355
+   ],
+   [
+    1060,
+    1355
+   ],
+   [
+    1040,
+    1335
+   ],
+   [
+    1040,
+    1195
+   ],
+   [
+    1150,
+    945
+   ]
+  ]
+ },
+ "terminal-cover-left-frame": {
+  "photo": "left",
+  "seam_only": true,
+  "poly": [
+   [
+    860,
+    695
+   ],
+   [
+    1340,
+    695
+   ],
+   [
+    1345,
+    1560
+   ],
+   [
+    1310,
+    1592
+   ],
+   [
+    905,
+    1592
+   ],
+   [
+    860,
+    1550
+   ]
+  ]
+ },
+ "thumb-rest": {
+  "photo": "rear",
+  "skin_mm": 0.8,
+  "material": "rubber",
+  "poly": [
+   [
+    1505,
+    720
+   ],
+   [
+    1520,
+    690
+   ],
+   [
+    1550,
+    665
+   ],
+   [
+    1800,
+    668
+   ],
+   [
+    1810,
+    700
+   ],
+   [
+    1830,
+    1010
+   ],
+   [
+    1880,
+    1050
+   ],
+   [
+    1890,
+    1210
+   ],
+   [
+    1830,
+    1255
+   ],
+   [
+    1780,
+    1255
+   ],
+   [
+    1660,
+    1080
+   ],
+   [
+    1600,
+    1050
+   ],
+   [
+    1560,
+    1000
+   ],
+   [
+    1520,
+    900
+   ]
+  ]
+ },
+ "card-battery-cover": {
+  "photo": "bottom",
+  "skin_mm": 1.2,
+  "poly": [
+   [
+    90,
+    740
+   ],
+   [
+    100,
+    722
+   ],
+   [
+    250,
+    722
+   ],
+   [
+    300,
+    765
+   ],
+   [
+    720,
+    765
+   ],
+   [
+    845,
+    820
+   ],
+   [
+    850,
+    1090
+   ],
+   [
+    700,
+    1110
+   ],
+   [
+    680,
+    1160
+   ],
+   [
+    120,
+    1160
+   ],
+   [
+    88,
+    1130
+   ]
+  ],
+  "hinge": "inner edge, x about 51 mm"
+ },
+ "built-in-flash": {
+  "photo": "right",
+  "solid": true,
+  "z_min_mm": 77.0,
+  "poly": [
+   [
+    230,
+    130
+   ],
+   [
+    250,
+    95
+   ],
+   [
+    320,
+    80
+   ],
+   [
+    1590,
+    95
+   ],
+   [
+    1640,
+    130
+   ],
+   [
+    1610,
+    180
+   ],
+   [
+    1450,
+    230
+   ],
+   [
+    1400,
+    260
+   ],
+   [
+    330,
+    270
+   ],
+   [
+    260,
+    230
+   ]
+  ],
+  "note": "head of the pop-up flash = front of the hump cap ahead of the hot shoe (y < 26 mm); hinge at its rear edge",
+  "y_max_mm": 26.0
+ },
+ "eyecup": {
+  "photo": "right",
+  "solid": true,
+  "y_min_mm": 60.0,
+  "note": "rubber eyecup = hull region behind y 60 mm inside the rear-view eyecup outline (x 47.9-89.1, z 59.3-81.5)"
+ },
+ "leatherette": {
+  "skin_mm": 0.8,
+  "rule": "z below 61.2 (x < 69) or 55.5 (x >= 69); y below 30.4 (x < 58) or 28.0 (x >= 58); not the bottom plate (z > 1.5); excludes terminal covers and the mount ring"
+ }
+}
