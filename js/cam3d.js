@@ -29,10 +29,12 @@
     modedial: 'Turn the dial one click', release: 'Unlock the lens', shutterbtn: 'Press the shutter', shutter: 'Fire the shutter', mount: 'Attach the loose lens', menubtn: 'Press MENU', infobtn: 'Press INFO', setbtn: 'Press Q/SET', playbtn: 'Press Playback', crossup: 'Press ▲', crossdown: 'Press ▼', crossleft: 'Press ◀', crossright: 'Press ▶' };
   const KEYS = { menubtn: 'menu', infobtn: 'info', setbtn: 'set', playbtn: 'play', crossup: 'up', crossdown: 'down', crossleft: 'left', crossright: 'right' };
   // registry ids whose behaviour maps onto a legacy action
+  // actions that only the detailed model has
+  const REG_ACTION = { battery: 'Take the battery out / put it back', card: 'Take the card out / put it back', 'battery-lock-lever': 'Press the lever: release the battery', speedlite: 'Tilt the head (bounce)' };
   const REG_LEGACY = { 'card-battery-cover-lock': 'door', 'terminal-cover-right': 'terminals', 'terminal-cover-left': 'terminals2' };
   // when a registry part's hotspot may show
   const REG_COND = { 'lens-mount': 'nolens', contacts: 'nolens', 'lens-lock-pin': 'nolens', 'rf-lens-mount-index': 'nolens', 'image-sensor': 'open', 'body-cap': 'never',
-    shutter: 'in', processor: 'in', battery: 'door', card: 'door', 'digital-terminal': 'cover', 'hdmi-micro-out': 'cover', 'dc-cord-hole': 'cover', 'external-mic-in': 'cover2', 'remote-terminal': 'cover2',
+    shutter: 'in', processor: 'in', battery: 'door', card: 'door', 'battery-lock-lever': 'door', speedlite: 'speedlite', 'digital-terminal': 'cover', 'hdmi-micro-out': 'cover', 'dc-cord-hole': 'cover', 'external-mic-in': 'cover2', 'remote-terminal': 'cover2',
     lens: 'lens', 'zoom-ring': 'lens', 'focus-ring': 'lens', 'front-element': 'lens', 'aperture-diaphragm': 'lensin', 'lens-elements': 'lensin' };
   const VIEW_OF = { top: 'top', front: 'front', rear: 'back', bottom: 'bottom', left: 'left', right: 'right', internal: 'front', lens: 'left' };
 
@@ -44,6 +46,7 @@
     const hotLayer = h('div', { class: 'c3d-hot' });
     const tag = h('div', { class: 'c3d-tag', hidden: true, 'aria-hidden': 'true' });
     hotLayer.append(tag);
+    const guideEls = [];
     stage.append(canvas, hotLayer);
     const renderer = new T3.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: !!opt.preserve });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -67,7 +70,7 @@
     const flashLight = new T3.PointLight(0xffffff, 0, 60); flashLight.position.set(M.mount.x, 6, 3); scene.add(flashLight);
     /* ---- highlight: the selected part's own surfaces glow amber, a hovered part lifts slightly ----
        each lit mesh gets a cached clone of its material, so parts that share a material don't light up together */
-    const HI = { sel: [0xffb224, 0.42], hover: [0xffffff, 0.10] }, hiCache = new Map(), lit = { sel: null, hover: null };
+    const HI = { sel: [0xffb224, 0.28], hover: [0xffffff, 0.045] }, hiCache = new Map(), lit = { sel: null, hover: null };
     function hiMat(m, kind) {
       if (!m || !m.emissive) return m;
       const key = m.uuid + kind; let c = hiCache.get(key);
@@ -88,7 +91,7 @@
 
     const modeIdx = (name) => Math.max(0, K.MODES.indexOf(name));
     const st = { theta: 0.5, phi: 1.2, radius: M.radius || 30, target: M.target.clone(), sel: null, xray: false, hotspots: !opt.scroll, mode: modeIdx(C.state.mode), zoomK: 0, N: 5.6, lens: null, lensState: 'none' };
-    const cur = { lensOut: 0, offX: 0, offY: 0, free: 0, flash: 0, door: 0, cover: 0, cover2: 0, explode: 0, dial: 0, dialIndex: 0, power: 0, theta: st.theta, phi: st.phi, radius: st.radius, press: 0 };
+    const cur = { lensOut: 0, offX: 0, offY: 0, free: 0, flash: 0, door: 0, cover: 0, cover2: 0, explode: 0, dial: 0, dialIndex: 0, power: 0, theta: st.theta, phi: st.phi, radius: st.radius, press: 0, batOut: 0, cardOut: 0, speed: 0, bounce: 0, lookY: 0 };
     const tgt = Object.assign({}, cur);
     const dialIndexOf = (m) => Math.max(0, (A.modeOrder || K.MODES).indexOf(K.MODES[m]));
     tgt.dial = cur.dial = -st.mode * Math.PI * 2 / K.MODES.length; tgt.dialIndex = cur.dialIndex = dialIndexOf(st.mode);
@@ -149,7 +152,21 @@
     };
     api.toggle = (k) => api.set(k, tgt[k] > 0.5 ? 0 : 1);
     // act on a part (either model's id); dir picks a cross-key press point
+    // battery, card and the Speedlite (detailed model): the door opens first if needed
+    api.takeOut = function (which, out) {
+      const k = which === 'battery' ? 'batOut' : 'cardOut', want = out == null ? (tgt[k] > 0.5 ? 0 : 1) : (out ? 1 : 0);
+      if (want && tgt.door < 0.5) api.set('door', 1);
+      api.set(k, want);
+      const anyOut = (k === 'batOut' ? want : tgt.batOut > 0.5) || (k === 'cardOut' ? want : tgt.cardOut > 0.5);
+      tgt.lookY = anyOut ? -5.5 : 0; // frame the parts below the camera
+      if (want) { tgt.explode = 0; tgt.theta = 0.45; tgt.phi = 1.5; tgt.radius = Math.max(tgt.radius, 44); }
+      touch(); fire('state');
+    };
+    api.speedlite = function (on) { const want = on == null ? (tgt.speed > 0.5 ? 0 : 1) : (on ? 1 : 0); api.set('speed', want); if (!want) api.set('bounce', 0); if (want) U.toast('Speedlite EL-100 on the hot shoe'); fire('state'); };
     api.act = function (id, dir) {
+      if (M.kind === 'glb' && (id === 'battery' || id === 'battery-lock-lever')) { api.takeOut('battery'); return; }
+      if (M.kind === 'glb' && id === 'card') { api.takeOut('card'); return; }
+      if (M.kind === 'glb' && id === 'speedlite') { api.set('bounce', tgt.bounce > 0.5 ? 0 : 1); return; }
       const lg = M.legacy(id) || id;
       if (lg === 'crossup' && M.kind === 'glb' && id === 'cross-keys') { const d = dir || 'up'; FF.menu.key(d); pressMesh('PART_CrossKeys'); touch(); return; }
       if (lg === 'power') { FF.menu.key('power'); api.set('power', FF.menu.power ? 1 : 0); }
@@ -164,7 +181,7 @@
       touch();
     };
     function pressMesh(name) { if (A.press && name) { A.press(name); touch(); } }
-    api.actionLabel = (id) => { const lg = M.legacy(id) || id; return id === 'cross-keys' ? null : ACTION[lg] || null; };
+    api.actionLabel = (id) => { if (M.kind === 'glb' && REG_ACTION[id]) return REG_ACTION[id]; const lg = M.legacy(id) || id; return id === 'cross-keys' ? null : ACTION[lg] || null; };
     api.select = function (id, quiet) { st.sel = id; light('sel', id); touch(); if (!quiet) fire('select', id); };
     // turn the camera so the part faces the viewer (shortest way round); instant with reduced motion
     api.focus = function (id) {
@@ -215,7 +232,7 @@
       if (dragLens) { const near = nearMount(); canvas.classList.remove('snap'); dragLens = null; if (near || d.moved < 5) api.attach(); return; }
       if (d.moved < 6) {
         const hit = pick(e), id = hit && partOf(hit.object);
-        if (id) { api.select(id); const lg = M.legacy(id) || id; if (id === 'cross-keys' && M.kind === 'glb') api.act(id, crossDir(hit)); else if (ACTION[lg] && lg !== 'mount' && lg !== 'shutter') api.act(id); }
+        if (id) { api.select(id); const lg = M.legacy(id) || id; if (id === 'cross-keys' && M.kind === 'glb') api.act(id, crossDir(hit)); else if (M.kind === 'glb' && REG_ACTION[id]) api.act(id); else if (ACTION[lg] && lg !== 'mount' && lg !== 'shutter') api.act(id); }
         else api.select(null);
       }
     }
@@ -231,7 +248,8 @@
     function condOK(o, lensOn, open) {
       const c = o.cond;
       if (c === 'never') return false; if (c === 'in') return open; if (c === 'open') return open || !lensOn; if (c === 'nolens') return !lensOn || cur.explode > 0.25;
-      if (c === 'door') return cur.door > 0.5 || cur.explode > 0.25; if (c === 'cover') return cur.cover > 0.5; if (c === 'cover2') return cur.cover2 > 0.5;
+      if (c === 'door') return cur.door > 0.5 || cur.explode > 0.25 || cur.batOut > 0.5 || cur.cardOut > 0.5;
+      if (c === 'speedlite') return cur.speed > 0.9; if (c === 'cover') return cur.cover > 0.5; if (c === 'cover2') return cur.cover2 > 0.5;
       if (c === 'lens') return st.lensState !== 'none'; if (c === 'lensin') return st.lensState !== 'none' && (open || o.id === 'iris' || o.id === 'aperture-diaphragm');
       return true;
     }
@@ -275,6 +293,13 @@
         if (flip) lx = selPos[0] - tw - 16; if (ly < 4) ly = selPos[1] + 14;
         tag.classList.toggle('flip', flip); tag.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px)`;
       } else tag.hidden = true;
+      // orientation guides beside the battery, card and Speedlite when they are out / on
+      (A.guides || []).forEach((g, i) => {
+        const el = guideEls[i] || (guideEls[i] = hotLayer.appendChild(h('div', { class: 'c3d-guide', 'aria-hidden': 'true' }, g.text)));
+        let ok = g.show(cur);
+        if (ok) { g.anchor.getWorldPosition(cen); cen.project(cam); const x = (cen.x + 1) / 2 * w, y = (1 - cen.y) / 2 * hh; ok = cen.z < 1 && x > 0 && x < w && y > 0 && y < hh; if (ok) el.style.transform = `translate(${Math.min(w - 190, x + 10).toFixed(1)}px, ${(y - 10).toFixed(1)}px)`; }
+        el.hidden = !ok;
+      });
     }
 
     /* ---- frame ---- */
@@ -290,7 +315,11 @@
       let flashOn = false;
       if (shutT >= 0) {
         moving = true; shutT += dt / 0.9; const s = shutT;
-        flashOn = s > 0.36 && s < 0.5 && cur.flash > 0.6; flashLight.intensity = flashOn ? 900 : 0;
+        const fireWin = s > 0.36 && s < 0.5;
+        flashOn = fireWin && cur.flash > 0.6; const slOn = fireWin && cur.speed > 0.9;
+        flashLight.intensity = flashOn || slOn ? (slOn ? 2600 : 900) : 0;
+        if (slOn) flashLight.position.set(M.mount.x, 13, 4); else flashLight.position.set(M.mount.x, 6, 3);
+        if (A.speedWin && A.speedWin.material && A.speedWin.material.emissive) A.speedWin.material.emissive.setHex(slOn ? 0xffffff : 0);
         cur.press = s < 0.5 ? 1 : 0;
         if (M.kind === 'glb') A.shutter(Math.min(1, s));
         else { const c1 = A.curtain1.position, c2 = A.curtain2.position; c1.y = s < 0.2 ? 1.8 - 9 * s : s < 0.55 ? 0 - (s - 0.2) * 5.2 : -1.8; c2.y = s < 0.4 ? 1.8 : s < 0.75 ? 1.8 - (s - 0.4) * 5.2 : 0; if (s >= 1) { c1.y = 1.8; c2.y = 1.8; } }
@@ -308,7 +337,7 @@
         A.battery.position.y += -1.5 * cur.door * (1 - cur.explode); A.card.position.y += -0.8 * cur.door * (1 - cur.explode);
       }
       if (st.lens && st.lensState === 'mounted') { const o = lensObjs[st.lens]; o.position.set(mountPos.x, mountPos.y, mountPos.z + cur.explode * 8.5 + cur.lensOut * 7); o.rotation.z = Math.min(1, cur.lensOut * 5) * 1.05; o.userData.A.explode(cur.explode); }
-      const sp = Math.sin(cur.phi), rad = cur.radius * (1 + 0.75 * cur.explode + 0.28 * cur.free), tz = st.target.z + cur.explode * 3.5, tx = st.target.x + 3.4 * cur.free; cam.position.set(tx + rad * sp * Math.sin(cur.theta), st.target.y + rad * Math.cos(cur.phi), tz + rad * sp * Math.cos(cur.theta)); cam.lookAt(tx, st.target.y, tz);
+      const sp = Math.sin(cur.phi), rad = cur.radius * (1 + 0.75 * cur.explode + 0.28 * cur.free), tz = st.target.z + cur.explode * 3.5, tx = st.target.x + 3.4 * cur.free; const ty = st.target.y + cur.lookY; cam.position.set(tx + rad * sp * Math.sin(cur.theta), ty + rad * Math.cos(cur.phi), tz + rad * sp * Math.cos(cur.theta)); cam.lookAt(tx, ty, tz);
       if (opt.scroll && st.vw) cam.setViewOffset(st.vw, st.vh, -cur.offX * st.vw, cur.offY * st.vh, st.vw, st.vh);
       renderer.render(scene, cam); placeHots(false); settled = 0;
     }

@@ -10,6 +10,7 @@
   const FF = (window.FF = window.FF || {});
   const PN = 'https://cam.start.canon/en/C015/manual/html/UG-00_Before_0110.html';
   const SPEC = 'https://cam.start.canon/en/C015/manual/html/UG-11_Reference_0080.html';
+  const MAN = 'https://cam.start.canon/en/C015/manual/html/UG-01_Preparations_0030.html'; // inserting/removing the battery and card
   const PHOTO = 'assets/models/canon-eos-r100/reference/';
   const D = '2026-11-10';
 
@@ -65,12 +66,15 @@
     ['tripod-socket', 'Tripod socket', null, 'bottom', 'tripod', null, '#lesson-longexp', null, 'A standard 1/4-inch thread for tripods and plates, in line with the lens axis.', 'Needed for long exposures and night scenes.', 'verified', PN],
     ['card-battery-cover', 'Card/battery compartment cover', 'Card / battery door', 'bottom', 'door', 'open-cover', null, 'CARD/BATT.', 'The hinged door under the grip over the battery and the SD card slot.', 'Slide the lock to OPEN and the door swings open.', 'verified', PN],
     ['card-battery-cover-lock', 'Card/battery compartment cover lock', null, 'bottom', null, 'open-cover', null, 'OPEN / LOCK', 'The slide that unlatches the card/battery door.', '', 'verified', PN],
+    ['battery-lock-lever', 'Battery lock lever', null, 'bottom', null, 'press', null, null, 'A small spring lever at the edge of the battery chamber that holds the battery in.', 'Press it aside to release the battery.', 'verified', MAN],
     ['serial-number', 'Serial number (body number)', 'Serial number', 'bottom', null, null, null, null, 'The body number printed on the label under the camera.', '', 'verified', PN],
     // ---- internal / accessory (educational; not on Canon's external part diagram) ----
+    // ---- accessory (Canon Speedlite EL-100, shown on the hot shoe when you add it) ----
+    ['speedlite', 'Speedlite EL-100', 'Speedlite flash', 'top', null, 'toggle', '#lesson-metering', 'Canon, ON/OFF dial, test button', 'A compact external flash for the hot shoe: 64.6 x 91.7 x 71.0 mm, 190 g, guide number 26, powered by two AA batteries. Its head tilts up for bounce flash. Far more power and softer light than the built-in flash.', 'Slide its foot into the hot shoe from the back and lock it. Tilt the head up to bounce light off a white ceiling.', 'verified', 'https://www.canon.co.uk/cameras/speedlite-flash-el-100/specifications/'],
     ['shutter', 'Shutter', null, 'internal', 'shutter', 'press', '#lesson-shutter', null, 'Curtains in front of the sensor that time the exposure, from 30 s to 1/4000 s (the R100 also uses an electronic first curtain). Internal geometry here is illustrative.', 'Press the shutter button with the lens off to watch it run.', 'educational', SPEC],
     ['processor', 'Main board and processor', null, 'internal', 'processor', null, null, null, 'Reads the sensor, runs autofocus and subject detection, and turns raw data into JPEGs and video. Illustrative only.', '', 'educational', null],
-    ['battery', 'Battery Pack LP-E17', 'LP-E17 battery', 'internal', 'battery', null, null, 'LP-E17', 'A rechargeable lithium-ion pack. Canon rates it at about 320 shots through the viewfinder or 400 on the screen (power saving).', 'Carry a spare. Cold drains it faster.', 'educational', SPEC],
-    ['card', 'SD memory card', null, 'internal', 'card', null, null, 'SD', 'One slot for SD, SDHC or SDXC cards (UHS-I).', 'Format new cards in the camera.', 'educational', SPEC],
+    ['battery', 'Battery Pack LP-E17', 'LP-E17 battery', 'bottom', 'battery', 'press', null, 'Canon, LP-E17, 7.2V 1040mAh, insertion arrow', 'The rechargeable lithium-ion pack (33.0 x 14.0 x 49.4 mm, 45 g). Its four contacts sit in recessed slots on the end that goes into the camera first. Canon rates it at about 320 shots through the viewfinder or 400 on the screen (power saving).', 'Open the card/battery cover, insert the contacts end first until the lock lever clicks over it. To remove it, press the battery lock lever aside and the battery pops up.', 'verified', MAN],
+    ['card', 'SD memory card', null, 'bottom', 'card', 'press', null, 'SD, capacity, insertion arrow', 'One slot for SD, SDHC or SDXC cards (UHS-I). A card is 24 x 32 x 2.1 mm with a cut corner, nine contacts on the back and a write-protect switch on the left edge.', 'Insert it with the label facing the front of the camera, contacts first, until it clicks. Set the write-protect switch up to allow writing. Push it in again to eject it.', 'verified', MAN],
     // ---- lens (kit RF-S 18-45mm and others; educational detail) ----
     ['lens', 'Lens', null, 'lens', 'lens', null, '#lesson-lenses', null, 'Gathers light and focuses it on the sensor. Focal length sets the angle of view; aperture sets brightness and depth of field.', '', 'educational', null],
     ['zoom-ring', 'Zoom ring', null, 'lens', 'zoomring', null, '#lesson-lenses', null, 'Turning it changes the focal length. On a retractable kit lens it also extends the barrel.', '', 'educational', null],
@@ -82,7 +86,7 @@
 
   const pascal = (id) => id.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
   // GLB mesh names that don't follow PART_<PascalId>
-  const MESH = { 'lens': ['LENS_Barrel'], 'zoom-ring': ['LENS_ZoomRing'], 'focus-ring': ['LENS_ControlRing'], 'front-element': ['LENS_FrontElement'],
+  const MESH = { 'speedlite': ['PART_Speedlite'], 'lens': ['LENS_Barrel'], 'zoom-ring': ['LENS_ZoomRing'], 'focus-ring': ['LENS_ControlRing'], 'front-element': ['LENS_FrontElement'],
     'aperture-diaphragm': ['LENS_Aperture'], 'lens-elements': ['LENS_Elements'], 'body-cap': [],
     'terminal-cover-left': ['PART_TerminalCoverLeft', 'PART_TerminalCoverLeftRemote'] };
   const parts = ROWS.map((r) => ({

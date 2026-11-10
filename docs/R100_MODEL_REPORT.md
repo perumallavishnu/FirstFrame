@@ -110,6 +110,24 @@ Corrections to the previous app, now fixed:
 - **Mobile build** is a uniform decimation of the large panels, not a hand-made low-poly model; small parts are unchanged. Draco needs the decoder from jsDelivr: if that CDN is blocked, the viewer falls back to the teaching model.
 - **Not used**: Higgsfield (no AI imagery was used as a geometry reference, by design), and the Blender MCP connection (Blender ran headless through scripts instead, which is reproducible).
 
+## Ports, battery, card and Speedlite (2026-11-11)
+- **Surface finish.** The shell's distance field is smoothed by 0.4 mm before meshing. That removes the 0.25 mm voxel stair-steps that glossy reflections turned into streaks. The moulded-plastic grain normal map is gone, because it streaked across UV islands.
+- **Port bays.** These are 2.8 mm recesses carved under both terminal covers (`tools/hull.py`), modelled in `build_details.py`:
+  - **USB Type-C:** 8.34 x 2.56 mm stadium opening, 6.69 x 0.70 mm tongue, 12 + 12 contacts at 0.5 mm pitch.
+  - **HDMI Type D:** 6.4 x 2.8 mm chamfered opening, 19 contacts at 0.4 mm pitch.
+  - **MIC:** 3.5 mm jack with bezel and sleeve.
+  - **Remote:** 2.5 mm E3 jack for the RS-60E3.
+  - **Markings:** MIC, USB and HDMI printed in the bays.
+  - Socket sizes come from the connector standards. Their exact positions in the bay come from Canon's rear diagram and the side photos.
+- **Battery chamber and card slot** are carved to size. They match the layout in Canon's manual (Inserting/Removing the Battery and Card): card behind the battery, both opening onto the door.
+- **LP-E17** is 33.0 x 14.0 x 49.4 mm (Canon manual). It has four recessed contacts on the end that goes in first, the Canon / LP-E17 / 7.2V 1040mAh markings and an insertion arrow. The four-contact layout follows Canon's battery drawing; the contact pitch is estimated.
+- **SD card** is 24 x 32 x 2.1 mm, with the cut corner, nine contacts on the back and the write-protect switch on the left edge. It goes in label to the front (Canon manual). The brand-neutral "SD 64GB" label is illustrative.
+- **Battery lock lever** is modelled.
+- **In the app, Battery out / Card out** open the door and slide each item fully out, then forward to face you. Guides read "Contacts end goes in first", "Label faces the front of the camera" and "9 contacts face the back, cut corner leads". Clicking either part on the model does the same.
+- **Speedlite EL-100** is 64.6 x 91.7 x 71.0 mm, guide number 26 (Canon UK spec). It's shaped from Canon's four gallery photos: foot with its contacts, lock, body with the wireless sensor window, ON/OFF dial, test button, and a tilting head with a Fresnel window.
+  - **The toggle** slides it into the shoe from behind. Clicking it tilts the head 90 degrees for bounce, and it fires with the shutter.
+  - **Simulator exposure:** it doesn't change the simulator's exposure maths; that still uses the built-in flash.
+
 ## Shelf lenses
 Pipeline: `tools/fetch_lens_refs.py` (Canon gallery photos) → `tools/lens_profile.py` (radius at every mm from the side photo, scaled to Canon's diameter, flange found where the bayonet narrows) → `lens_bands.json` (where each ring, trim, print and focal mark sits) → `build_lenses.py` (lathe objects, wrapped printing, anchors) → `tools/render_lenses.py` + `tools/compare_lenses.py` (side render with the photo's framing, outline IoU).
 

@@ -125,9 +125,9 @@ def mat(name, base, rough, metal=0.0, normal=None, nstrength=1.0, emit=None, alp
 
 BLACK = (0.022, 0.022, 0.024)
 M = {
-    "body": mat("MAT_Polymer_Body", BLACK, 0.52, normal="grain", nstrength=0.35),
+    "body": mat("MAT_Polymer_Body", BLACK, 0.5),  # smooth moulded finish: no grain map (it streaked across UV islands)
     "leather": mat("MAT_Rubber_Leatherette", (0.017, 0.017, 0.018), 0.78, normal="leather", nstrength=0.9),
-    "rubber": mat("MAT_Rubber_Soft", (0.02, 0.02, 0.021), 0.72, normal="grain", nstrength=0.5),
+    "rubber": mat("MAT_Rubber_Soft", (0.02, 0.02, 0.021), 0.72),
     "button": mat("MAT_Polymer_Button", (0.03, 0.03, 0.032), 0.38),
     "gloss": mat("MAT_Polymer_Gloss", (0.012, 0.012, 0.013), 0.16, coat=0.6),
     "knurl": mat("MAT_Polymer_Knurl", (0.03, 0.03, 0.032), 0.45, normal="knurl", nstrength=0.8),
@@ -147,7 +147,8 @@ M = {
     "flashwin": mat("MAT_Flash_Window", (0.035, 0.035, 0.037), 0.12, coat=0.5),  # smoked, as in the front photo
     "pcb": mat("MAT_Internal_PCB", (0.06, 0.22, 0.12), 0.6),
     "chip": mat("MAT_Internal_Chip", (0.08, 0.08, 0.09), 0.35, metal=0.5),
-    "battery": mat("MAT_Internal_Battery", (0.14, 0.14, 0.15), 0.55),
+    "battery": mat("MAT_Battery_LPE17", (0.035, 0.035, 0.038), 0.45),
+    "fresnel": mat("MAT_Flash_Fresnel", (0.86, 0.86, 0.84), 0.35),
     "card": mat("MAT_Internal_SDCard", (0.1, 0.22, 0.5), 0.45),
     "label": mat("MAT_Label", (0.03, 0.03, 0.032), 0.6),
 }
@@ -697,16 +698,7 @@ def build_sides():
     printed("PRINT_CoverHDMI", None, 0, 0, body="HDMI", h=2.0, up=(0, -1, 0), m="print_dark", parent=rc, at=loc, nrm=n, lift=0.05)
     lc = bpy.data.objects["PART_TerminalCoverLeft"]; loc, n, _ = hit("left", 33.0, 51.5, only=["PART_TerminalCoverLeft"])
     printed("PRINT_CoverMIC", None, 0, 0, body="MIC", h=2.6, up=(0, 0, 1), m="print_dark", parent=lc, at=loc, nrm=n, lift=0.05)
-    # ports (visible when a cover opens)
-    for name, face, y, z, w, h in (("PART_DigitalTerminal", "right", m["digital-terminal"]["y"], m["digital-terminal"]["z"], 3.0, 9.0),
-                                   ("PART_HdmiMicroOut", "right", m["hdmi-micro-out"]["y"], m["hdmi-micro-out"]["z"], 2.6, 6.8)):
-        loc, n, _ = hit(face, y, z, only=["BODY_Shell"])
-        pt = new_obj(name, rbox(name, w, h, 0.4, min(w, h) / 2.2), "SIDE_PORTS"); set_mat(pt, M["chip"]); orient(pt, loc - n * 0.3 * mm, n, (0, 0, 1))
-        anchor(pt, "ANCHOR_" + name[5:], loc, n)
-    for name, y, z, r in (("PART_ExternalMicIn", m["external-mic-in"]["y"], m["external-mic-in"]["z"], 1.9), ("PART_RemoteTerminal", m["remote-terminal"]["y"], m["remote-terminal"]["z"], 1.3)):
-        loc, n, _ = hit("left", y, z, only=["BODY_Shell"])
-        jk = new_obj(name, lathe(name, [(r - 0.7, -1.2), (r, -1.2), (r, 0.0), (r + 0.5, 0.0), (r + 0.5, 0.25), (r - 0.7, 0.25)], 32), "SIDE_PORTS"); set_mat(jk, M["steel"]); orient(jk, loc - n * 0.3 * mm, n, (0, 0, 1))
-        anchor(jk, "ANCHOR_" + name[5:], loc, n)
+    # sockets (USB-C, HDMI D, MIC, remote) are modelled in build_details.py, in the port bays carved by tools/hull.py
     dc = m["dc-cord-hole"]; loc, n, _ = hit("right", dc["y"], dc["z"], only=["BODY_Shell"])
     hole = new_obj("PART_DcCordHole", rbox("PART_DcCordHole", 4.0, 2.0, 0.3, 0.6), "SIDE_PORTS"); set_mat(hole, M["chip"]); orient(hole, loc - n * 0.2 * mm, n, (0, 0, 1))
     anchor(hole, "ANCHOR_DcCordHole", loc, n)
@@ -771,10 +763,7 @@ def build_internal():
     chip = new_obj("PART_Processor_Chip", rbox("chip", 14.0, 14.0, 1.4, 0.4), "INTERNAL_EDUCATIONAL"); set_mat(chip, M["chip"])
     chip.matrix_world = Matrix.Translation(P(52.0, 45.7, 40.0)) @ Matrix.Rotation(-math.pi / 2, 4, "X"); parent_keep(chip, pcb)
     anchor(pcb, "ANCHOR_Processor", P(52.0, 46.0, 40.0), Vector((0, 1, 0)))
-    bat = new_obj("PART_Battery", rbox("PART_Battery", 33.0, 14.6, 45.0, 1.2), "INTERNAL_EDUCATIONAL"); set_mat(bat, M["battery"]); bat.location = P(19.5, 26.0, 1.4)
-    motion(bat, "slide", axis=(0, 0, -1), rng=[0, 0.02]); anchor(bat, "ANCHOR_Battery", P(19.5, 26.0, 1.0), Vector((0, 0, -1)))
-    card = new_obj("PART_Card", rbox("PART_Card", 24.0, 2.1, 32.0, 0.6), "INTERNAL_EDUCATIONAL"); set_mat(card, M["card"]); card.location = P(22.0, 37.0, 1.4)
-    motion(card, "slide", axis=(0, 0, -1), rng=[0, 0.012]); anchor(card, "ANCHOR_Card", P(22.0, 37.0, 1.0), Vector((0, 0, -1)))
+    # the LP-E17 battery and SD card are full models in build_details.py
     for o in COL["INTERNAL_EDUCATIONAL"].objects: o["ff_educational"] = True
 
 
@@ -788,12 +777,16 @@ def make_anchors():
 
 
 build_top(); build_front(); build_rear(); build_viewfinder(); build_flash(); build_sides(); build_bottom(); build_internal()
+sys.path.insert(0, HERE)
+import build_details
+DETAILS = build_details.build(dict(P=P, M=M, COL=COL, new_obj=new_obj, set_mat=set_mat, orient=orient, hit=hit, anchor=anchor, motion=motion, rbox=rbox,
+                                   prism=prism, lathe=lathe, text_mesh=text_mesh, svg_mesh=svg_mesh, parent_keep=parent_keep, finish=finish, MEAS=MEAS))
 
 # hierarchy: everything under one body root so the app can move the camera as a unit
 root = bpy.data.objects.new("R100_Body", None); COL["CAMERA_BODY"].objects.link(root)
 bpy.context.view_layer.update()
 for o in list(bpy.data.objects):
-    if o is root or o.parent or o.type == "CAMERA" or o.name.startswith("LENS_") or o.name.startswith("R100_Lens"): continue
+    if o is root or o.parent or o.type == "CAMERA" or o.name.startswith("LENS_") or o.name.startswith("R100_Lens") or o.name.startswith("R100_Speedlite"): continue
     mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
 root["ff_profile"] = "canon-eos-r100"; root["ff_units"] = "meters"
 root["ff_source"] = "Visual hull of the Canon EOS R100 product photos + measured part positions (blender/eos-r100). Hand-built, not a scan."
