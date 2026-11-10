@@ -1,0 +1,8 @@
+kit     IoU 0.943
+p16     IoU 0.982
+p28     IoU 0.927
+p35     IoU 0.980
+prime   IoU 0.975
+tele    IoU 0.984
+travel  IoU 0.976
+wide    IoU 0.983

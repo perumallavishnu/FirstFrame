@@ -1,0 +1,24 @@
+# Canon's photos, manual diagrams and icons are Canon's copyright: kept locally for modelling, never committed.
+# Restore them with:  python -I blender/eos-r100/tools/fetch_refs.py   (provenance in reference/SOURCES.md)
+assets/models/canon-eos-r100/reference/*
+!assets/models/canon-eos-r100/reference/SOURCES.md
+# comparison sheets embed those photos
+blender/eos-r100/renders/compare/
+blender/eos-r100/renders/lenses/lenses_compare.png
+
+# regenerable build cache (tools/masks.py -> hull.py -> sdf_to_mesh.py) and Blender backups
+blender/eos-r100/build/
+*.blend1
+__pycache__/
+*.pyc
+
+# upstream clone of arjun988/blender-skills (the installed copy lives in .claude/skills, pinned in BLENDER_SKILLS_PIN.txt)
+.tools/
+
+# local tool settings and OS/editor noise
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+node_modules/

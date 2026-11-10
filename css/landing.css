@@ -1,0 +1,51 @@
+/* landing.css: scroll-driven landing page. The stage is always dark, like a studio; the sections below follow the theme. */
+html { overflow-x: clip; }
+.lp { --ground: #0b0c0d; --ink2: #f3efe6; --mut2: #a9a59b; }
+.lp-stage { position: relative; height: 620vh; width: 100vw; margin-left: calc(50% - 50vw); background: var(--ground); color: var(--ink2); }
+.lp-sticky { position: sticky; top: var(--hh, 56px); height: calc(100vh - var(--hh, 56px)); height: calc(100svh - var(--hh, 56px)); overflow: hidden;
+  background: radial-gradient(90% 70% at 62% 42%, #2a2d31 0%, #131416 55%, #0b0c0d 100%); }
+.lp-3d { position: absolute; inset: 0; } .lp-3d .c3d-canvas { width: 100%; height: 100%; }
+.lp-3d.failed::after { content: 'The 3D view needs WebGL.'; position: absolute; inset: 0; display: grid; place-items: center; color: var(--mut2); }
+.lp-caps { position: absolute; inset: 0; pointer-events: none; }
+.lp-cap { position: absolute; top: 50%; width: min(40vw, 560px); margin-top: -190px; display: grid; gap: 16px; justify-items: start; pointer-events: auto; will-change: opacity, transform; }
+.lp-cap.l { left: clamp(20px, 6vw, 96px); } .lp-cap.r { right: clamp(20px, 6vw, 96px); }
+.lp-k { font: 600 .78rem/1 var(--mono, ui-monospace, monospace); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.lp-t { font-family: 'Archivo', 'Instrument Sans', sans-serif; font-stretch: 112%; font-weight: 750; font-size: clamp(2rem, 4.6vw, 4.4rem); line-height: .98; letter-spacing: -.02em; margin: 0; color: var(--ink2); text-wrap: balance; }
+.lp-p { font-size: clamp(1rem, 1.25vw, 1.2rem); line-height: 1.55; color: var(--mut2); margin: 0; max-width: 44ch; }
+.lp .btn.ghost { background: transparent; color: var(--ink2); border-color: rgba(243,239,230,.35); } .lp .btn.ghost:hover { border-color: var(--ink2); }
+.lp-ticks { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 6px; }
+.lp-tick { background: none; border: 0; padding: 10px 4px; cursor: pointer; color: var(--mut2); font: 600 .68rem/1 var(--mono, monospace); letter-spacing: .1em; text-transform: uppercase; display: grid; gap: 7px; justify-items: center; min-width: 74px; }
+.lp-tick::before { content: ''; width: 100%; height: 2px; background: rgba(243,239,230,.22); transition: background 180ms cubic-bezier(.165,.84,.44,1); }
+.lp-tick.on { color: var(--ink2); } .lp-tick.on::before { background: var(--accent); }
+.lp-hint { position: absolute; right: 26px; bottom: 30px; font: 600 .68rem/1 var(--mono, monospace); letter-spacing: .2em; text-transform: uppercase; color: var(--mut2); writing-mode: vertical-rl; }
+.lp-hint::after { content: ''; display: block; width: 1px; height: 46px; background: currentColor; margin: 10px auto 0; animation: lp-drop 1.8s cubic-bezier(.65,0,.35,1) infinite; transform-origin: top; }
+@keyframes lp-drop { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.lp-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; } .lp-flash.go { animation: lp-fl 520ms cubic-bezier(.165,.84,.44,1); }
+@keyframes lp-fl { 0% { opacity: 0; } 12% { opacity: .85; } 100% { opacity: 0; } }
+.lp-sheet { position: absolute; left: clamp(20px, 6vw, 96px); bottom: 84px; display: flex; gap: 10px; padding: 10px; background: #f3efe6; border-radius: 4px; box-shadow: 0 18px 50px rgba(0,0,0,.55); will-change: opacity, transform; }
+.lp-sheet figure { margin: 0; width: clamp(96px, 11vw, 168px); } .lp-sheet img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; background: #1c1d1f; } .lp-sheet figcaption { font: 500 .62rem/1.6 var(--mono, monospace); color: #2a2a28; letter-spacing: .04em; }
+.lp-cap.l4 { margin-top: -270px; }
+
+.lp-sec { padding: clamp(56px, 9vw, 120px) 0 0; }
+.lp-head { display: grid; gap: 12px; max-width: 760px; margin-bottom: 30px; } .lp-head h2 { font-family: 'Archivo', sans-serif; font-stretch: 110%; font-size: clamp(1.7rem, 3.6vw, 3rem); line-height: 1.02; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+.lp-course { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.lp-part { padding: 22px 22px 26px 0; border-bottom: 1px solid var(--line); } .lp-part + .lp-part { padding-left: 22px; border-left: 1px solid var(--line); }
+.lp-num { font: 600 .8rem/1 var(--mono, monospace); color: var(--accent); letter-spacing: .14em; } .lp-part h3 { margin: 10px 0 12px; font-size: 1.25rem; }
+.lp-part ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; } .lp-part li { display: grid; gap: 1px; } .lp-part a { color: var(--ink); text-decoration: none; font-weight: 600; } .lp-part a:hover { color: var(--accent); text-decoration: underline; }
+.lp-scenes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 10px; }
+.lp-scene { display: grid; gap: 6px; justify-items: start; padding: 16px; border: 1px solid var(--line); border-radius: var(--r-sm, 10px); text-decoration: none; color: var(--ink); background: var(--surface); transition: border-color 180ms cubic-bezier(.165,.84,.44,1), transform 180ms cubic-bezier(.165,.84,.44,1); }
+.lp-scene:hover { border-color: var(--accent); transform: translateY(-2px); }
+.lp-missions { list-style: none; counter-reset: m; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.lp-missions li { counter-increment: m; border-bottom: 1px solid var(--line); } .lp-missions a { display: grid; grid-template-columns: 3ch 1fr auto auto; gap: 16px; align-items: baseline; padding: 14px 4px; text-decoration: none; color: var(--ink); }
+.lp-missions a::before { content: counter(m, decimal-leading-zero); font: 600 .78rem/1 var(--mono, monospace); color: var(--muted); } .lp-missions a:hover b { color: var(--accent); }
+.lp-note { padding-bottom: 20px; } .lp-note p { line-height: 1.6; max-width: 60ch; }
+.lp-stage.static { height: auto; } .lp-stage.static .lp-sticky { position: relative; top: 0; height: auto; padding: 40px 0; } .lp-stage.static .lp-3d { position: relative; height: 56vh; } .lp-stage.static .lp-caps { position: static; display: grid; gap: 48px; padding: 24px clamp(20px, 6vw, 96px); } .lp-stage.static .lp-cap { position: static; margin: 0; width: auto; opacity: 1 !important; transform: none !important; visibility: visible !important; } .lp-stage.static .lp-ticks, .lp-stage.static .lp-hint, .lp-stage.static .lp-sheet { display: none; }
+@media (max-width: 859px) {
+  .lp-caps::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(to top, rgba(11,12,13,.96) 45%, rgba(11,12,13,0)); }
+  .lp-cap, .lp-cap.l4 { top: auto; bottom: 86px; left: 20px !important; right: 20px !important; width: auto; margin: 0; gap: 10px; }
+  .lp-t { font-size: clamp(1.7rem, 8vw, 2.5rem); } .lp-tick span { display: none; } .lp-tick { min-width: 34px; } .lp-hint { display: none; }
+  .lp-sheet { left: 20px; right: 20px; bottom: auto; top: 16px; } .lp-sheet figure { width: auto; flex: 1; }
+  .lp-missions a { grid-template-columns: 3ch 1fr auto; } .lp-missions a .small { display: none; }
+  .lp-part + .lp-part { padding-left: 0; border-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .lp-hint::after { animation: none; } .lp-scene { transition: none; } }
