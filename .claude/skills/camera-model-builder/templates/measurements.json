@@ -1,0 +1,25 @@
+{
+  "_about": "Component positions for <Maker Model>, measured from the official photos in assets/models/<camera-id>/reference on <YYYY-MM-DD>. Scale per photo and per axis to the published size <W x H x D> mm (<spec URL>). Cross-checks: mount throat <measured> mm (standard <value>), sensor width <measured> mm (spec <value>), lens axis / hot shoe / tripod / eyepiece x within <n> mm. Expect +/-1 mm on major parts, +/-1.5 mm on small parts.",
+  "frame": {
+    "units": "mm",
+    "x": "0 = grip-side edge, seen from the front +x runs left to right",
+    "y": "0 = front of grip, increasing toward the back",
+    "z": "0 = bottom plate",
+    "blender": "Blender X = x - <W/2>, Y = y - <D/2> (front faces -Y), Z = z - <H/2>, in metres. glTF: Three.js +Z = front, +Y = up."
+  },
+  "envelope": {
+    "body_front_face_y": 0,
+    "body_rear_face_y": 0,
+    "grip_x": [0, 0],
+    "grip_top_z": 0,
+    "hump_x_at_top": [0, 0],
+    "hump_top_z": 0,
+    "mount_flange_protrusion": 0
+  },
+  "parts": {
+    "lens-mount":   { "x": 0, "z": 0, "y": 0, "r_outer": 0, "r_throat": 0, "face": "front" },
+    "image-sensor": { "x": 0, "z": 0, "y": 0, "w": 0, "h": 0, "face": "front", "note": "y = mount face + flange distance" },
+    "shutter-button": { "x": 0, "z": 0, "y": 0, "d": 0, "face": "top" },
+    "example-button": { "x": 0, "z": 0, "y": 0, "d": 0, "face": "rear", "status": "inferred", "note": "say how it was placed when the photos don't show it" }
+  }
+}

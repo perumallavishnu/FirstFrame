@@ -200,6 +200,18 @@ python -I blender/eos-r100/tools/fetch_refs.py
 
 That downloads Canon's reference photos, which are not in this repo because they're Canon's copyright. Then follow the steps in the report: `masks.py` → `hull.py` → `sdf_to_mesh.py` → `build_r100.py` → `export_glb.py`.
 
+### Adding more cameras
+
+The method is written up as a Claude Code skill in **[.claude/skills/camera-model-builder/](.claude/skills/camera-model-builder/SKILL.md)**. It covers:
+- **sourcing** official photos and manuals;
+- **calibration** and the visual hull;
+- **placing parts** and markings;
+- **building lenses, connectors, battery and card** to their published dimensions;
+- **the accuracy gates** every camera must pass (size within 1 mm, outline match of at least 92% in every view);
+- **adding the camera** to the app as a new profile.
+
+In a Claude Code session in this repo, ask for a camera by name (for example "add the Nikon Z50 II") and the skill takes it from there.
+
 ## Accuracy and honesty
 
 - **This is a learning simulator, not the real camera.** Exposure, depth of field, motion blur, noise and autofocus follow real optics and are good enough to learn from. Image quality, autofocus speed and menu depth are simplified.

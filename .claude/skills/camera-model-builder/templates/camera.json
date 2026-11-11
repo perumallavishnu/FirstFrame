@@ -1,0 +1,50 @@
+{
+  "_about": "Per-camera pipeline config read by the shared tools (see SKILL.md step 0). Every number needs a source in SOURCES.md. Values below are placeholders; R100 values are given in comments only as a scale reference.",
+  "id": "maker-model",
+  "display_name": "Maker Model",
+  "size_mm": { "w": 0, "h": 0, "d": 0, "_r100": "116.3 x 85.5 x 68.8", "d_note": "what the spec depth includes (eyecup? grip?)" },
+  "frame": {
+    "x": "0 = grip-side edge, +x toward the other end, seen from the front",
+    "y": "0 = front of grip, +y toward the back",
+    "z": "0 = bottom plate, +z up",
+    "offset_mm": [0, 0, 0],
+    "_offset_note": "Blender X = x - offset[0] etc. Use half of each size so the body is centred (R100: 58.15, 34.4, 42.75)."
+  },
+  "mount": { "name": "", "flange_mm": 0, "throat_d_mm": 0, "contacts": 0, "centre_xz_mm": [0, 0] },
+  "photos": {
+    "front":  { "file": "", "cal_px": { "x": [0, 0], "z": [0, 0] } },
+    "rear":   { "file": "", "cal_px": { "x": [0, 0], "z": [0, 0] } },
+    "top":    { "file": "", "cal_px": { "x": [0, 0], "y": [0, 0] } },
+    "bottom": { "file": "", "cal_px": { "x": [0, 0], "y": [0, 0] } },
+    "left":   { "file": "", "cal_px": { "y": [0, 0], "z": [0, 0] } },
+    "right":  { "file": "", "cal_px": { "y": [0, 0], "z": [0, 0] } }
+  },
+  "hull": {
+    "voxel_mm": 0.25,
+    "sdf_blur_mm": 0.35,
+    "smooth_k_mm": 4.0,
+    "field_smooth_mm": 0.4,
+    "seam_gap_mm": 0.35,
+    "front_face_y": null,
+    "rear_clamp_y": null,
+    "rear_clamp_exclude_box": null,
+    "cuts": [
+      { "name": "hot-shoe", "box_mm": [0, 0, 0, 0, 0, 0] }
+    ],
+    "cavities": [
+      { "name": "battery-chamber", "box_mm": [0, 0, 0, 0, 0, 0] },
+      { "name": "card-slot", "box_mm": [0, 0, 0, 0, 0, 0] }
+    ],
+    "port_bay_depth_mm": 2.8
+  },
+  "panels_file": "panels.json",
+  "measurements_file": "measurements.json",
+  "lens_bands_file": "lens_bands.json",
+  "outputs": {
+    "blend": "Maker_Model.blend",
+    "glb": "assets/models/maker-model/Maker_Model.glb",
+    "glb_mobile": "assets/models/maker-model/Maker_Model_mobile.glb",
+    "body_root": "Model_Body",
+    "kit_lens_root": "Model_Lens_Kit"
+  }
+}

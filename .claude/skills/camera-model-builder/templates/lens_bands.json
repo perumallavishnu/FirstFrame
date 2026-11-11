@@ -1,0 +1,13 @@
+{
+  "_about": "Lens build spec. t = mm forward of the mount flange. 'profile' = radius curve from the official side photo (tools/lens_profile.py -> lens_profiles/<id>.json). Bands: metal = trim, body = fixed barrel, zoom = ribbed rubber zoom ring, focus = knurled focus/control ring, inner = barrel that slides forward when zooming. prints: [text, t, angle_deg (90 = top, at the mount index), cap height mm]. scale: focal-length numbers on the zoom ring with angle offsets from the index, measured in the photo. Dimensions from <spec URL> on <YYYY-MM-DD>.",
+  "kit": {
+    "name": "<Maker> <focal> <aperture>",
+    "dia": 0, "len": 0, "dims_src": "<spec URL>",
+    "profile": "kit",
+    "glass_r": 0.5,
+    "bands": [["metal", -7, 0], ["body", 0, 0], ["zoom", 0, 0], ["focus", 0, 0], ["body", 0, 0]],
+    "prints": [["<focal text>", 0, 90, 4.0]],
+    "scale": [["18", 0], ["24", 0], ["35", 0]],
+    "approximate": false
+  }
+}

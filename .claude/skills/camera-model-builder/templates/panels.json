@@ -1,0 +1,14 @@
+{
+  "_about": "Separate-panel outlines traced from the official photos, in full-resolution photo pixels. The tools convert them to frame mm through the photo's calibration. Each panel is cut as a skin of skin_mm from the hull with a constant seam gap. Traced <YYYY-MM-DD>; accuracy about +/-0.5 mm.",
+  "terminal-cover-right": {
+    "photo": "right",
+    "skin_mm": 1.0,
+    "poly": [[0, 0], [0, 0], [0, 0], [0, 0]],
+    "seam_frame": [[0, 0], [0, 0], [0, 0], [0, 0]]
+  },
+  "battery-card-cover": {
+    "photo": "bottom",
+    "skin_mm": 1.0,
+    "poly": [[0, 0], [0, 0], [0, 0], [0, 0]]
+  }
+}
