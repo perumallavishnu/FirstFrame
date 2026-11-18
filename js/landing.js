@@ -72,7 +72,7 @@
     caps = CH.map((c, i) => h('div', { class: 'lp-cap ' + (i % 2 ? 'r' : 'l') + (i === 4 ? ' l4' : '') },
       h('span', { class: 'lp-k' }, c.k), h(i === 0 ? 'h1' : 'h2', { class: 'lp-t' }, c.t), h('p', { class: 'lp-p' }, c.p),
       h('div', { class: 'row' }, c.cta.map((b) => h('a', { class: 'btn' + (b[2] ? ' primary' : ' ghost'), href: b[0] }, b[1])))));
-    ticks = CH.map((c, i) => h('button', { class: 'lp-tick', type: 'button', 'aria-label': 'Go to chapter: ' + c.k, onclick: () => { const r = stageEl.getBoundingClientRect(), span = r.height - innerHeight; window.scrollTo({ top: window.scrollY + r.top + span * (c.a + 0.05), behavior: reduce() ? 'auto' : 'smooth' }); } }, h('span', null, c.k.split('·').pop().trim())));
+    ticks = CH.map((c, i) => h('button', { class: 'lp-tick', type: 'button', 'aria-label': 'Go to chapter: ' + c.k, onclick: () => { const r = stageEl.getBoundingClientRect(), span = r.height - innerHeight; const y = window.scrollY + r.top + span * (c.a + 0.05); if (FF.scroll) FF.scroll.to(y); else window.scrollTo({ top: y, behavior: reduce() ? 'auto' : 'smooth' }); } }, h('span', null, c.k.split('·').pop().trim())));
     stageEl = h('section', { class: 'lp-stage' + (reduce() ? ' static' : ''), 'aria-label': 'Introduction' },
       h('div', { class: 'lp-sticky' }, stage3d, flashEl, sheet, h('div', { class: 'lp-caps' }, caps), h('nav', { class: 'lp-ticks', 'aria-label': 'Chapters' }, ticks), h('div', { class: 'lp-hint', 'aria-hidden': 'true' }, 'Scroll')));
     const L = FF.lessons.list, pr = FF.progress.data;

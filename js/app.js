@@ -11,7 +11,7 @@
   const savedTheme = U.store.get('theme', null);
   if (savedTheme) root.setAttribute('data-theme', savedTheme);
   $('#themebtn').addEventListener('click', () => {
-    const dark = root.getAttribute('data-theme') ? root.getAttribute('data-theme') === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const dark = root.getAttribute('data-theme') !== 'light'; // the cinematic dark theme is the default
     const next = dark ? 'light' : 'dark'; root.setAttribute('data-theme', next); U.store.set('theme', next);
     if (current === 'simulator') FF.sim.hudDirty = true;
   });
@@ -74,7 +74,7 @@
       else if (r.v === 'glossary') FF.pages.glossary(el);
     } catch (e) { console.error(e); el.replaceChildren(h('div', { class: 'callout warn' }, 'Something went wrong drawing this page: ' + e.message)); }
     document.title = 'FirstFrame · ' + (r.v === 'lesson' ? (FF.lessons.byId(r.id) || { title: 'Lesson' }).title : r.v[0].toUpperCase() + r.v.slice(1));
-    if (r.v !== 'simulator') window.scrollTo(0, 0);
+    if (r.v !== 'simulator') { if (FF.scroll) FF.scroll.to(0, { immediate: true }); else window.scrollTo(0, 0); }
   }
   window.addEventListener('hashchange', route);
   window.addEventListener('ff-progress', () => FF.progress.chip());
