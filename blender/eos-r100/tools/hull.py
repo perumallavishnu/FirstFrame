@@ -151,7 +151,10 @@ def main(mdir, out, vox=0.25):
         parts[name] = skin(np.maximum(poly_field(pn["photo"], pn["poly"]), half), pn["skin_mm"])
     fl = panels["built-in-flash"]
     # the pop-up head is only the front of the hump cap, hinged just ahead of the hot shoe (Canon flash-up diagram)
-    parts["PART_BuiltInFlash"] = np.maximum(np.maximum(np.maximum(base, poly_field("right", fl["poly"])), fl["z_min_mm"] - Z), Y - fl["y_max_mm"])
+    # its lower front seam is curved: high above the logo, dropping toward the housing sides (front + 3/4 photos)
+    sc = fl["seam_curve"]; u = np.clip((X - sc["x_centre"]) / sc["half_width"], -1.0, 1.0)
+    z_seam = sc["z_centre"] - (sc["z_centre"] - sc["z_edge"]) * u * u
+    parts["PART_BuiltInFlash"] = np.maximum(np.maximum(np.maximum(base, poly_field("right", fl["poly"])), z_seam - Z), Y - fl["y_max_mm"])
     box_eye = np.maximum(np.maximum(47.9 - X, X - 89.1), np.maximum(59.3 - Z, Z - 81.8))
     parts["PART_Eyecup"] = np.maximum(np.maximum(base, box_eye), 60.0 - Y)
     zb = np.where(X < 69, 61.2, 55.5); yb = np.where(X < 58, 30.4, 28.0)

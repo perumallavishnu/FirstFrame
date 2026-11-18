@@ -30,6 +30,12 @@ The R100 pipeline still hard-codes R100 values. They include the frame offsets 5
 Do this as its own commit, and test it, so a regression can't hide inside the new camera.
 
 ### 1. Identify and source (stage report: the sources table)
+- **Start from the intake folder when the user has filled one.** `intake/<camera-id>/` follows `docs/NEW_CAMERA_INTAKE.md`: research JSON 01–07, official photos, manual screenshots.
+  - Check every file for "NOT FOUND" values, missing `source_url`s and secondary-only sources, and report the gaps before modelling.
+  - Spot-check about 10 values against the cited official page, because research AIs still misquote.
+  - Copy the photos into `assets/models/<camera-id>/reference/`.
+  - `04_menus.json` and `05_controls.json` feed the camera's menu data, simulator behaviour and tutorials.
+  - Never measure from anything in `tutorial_art/` (AI images).
 - **Fix the exact model and region code**, for example "Nikon Z50 II body, product code VOA120AE". Confirm it with the user if the name is ambiguous (Mark I vs II, kit vs body).
 - **Collect everything in `references/sources.md`:**
   - the official manual's **part-names page**, saved as HTML plus its diagrams;
@@ -73,7 +79,11 @@ Do this as its own commit, and test it, so a regression can't hide inside the ne
 - **Write `build_<camera-id>.py`** following `build_r100.py`. Model each control as its own object (`PART_<PascalId>`). Drop each onto the real shell surface with the `hit()` ray-cast at its measured position, and orient it to the surface normal.
 - **Set the origin on the real pivot** for anything that moves (hinge edge, dial axis, press direction). Write `ff_motion`, `ff_axis` (in Three.js axes), `ff_range`, `ff_open` and so on as custom properties. **Set the pivot before attaching children.**
 - **Markings:** use the manual's icon SVGs (drop the invisible bounding rectangle), or plain text where an SVG glyph fails to fill. Conform markings to curved surfaces.
-- **Never reproduce a manufacturer logotype**: set brand words in a plain typeface.
+- **Brand wordmark:**
+  - Measure its box in the front photo: width, cap height and centre.
+  - Set it in the closest-looking installed font (for Canon, a heavy serif: Bookman Old Style Bold), fitted to that box with `printed(..., w=, font=)`. It must read like the photo at a glance, but never trace or import the logo artwork.
+  - Make sure no panel seam (flash head, cover) crosses it. On the real camera it sits on one fixed surface.
+- **Panel seams are measured too.** Where a seam curves (the R100 flash head front), give the cut a curve from the photos, not a flat plane.
 - **Materials:**
   - **body:** smooth matte polymer with no grain normal map;
   - **grip:** a pebble normal map;

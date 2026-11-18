@@ -291,7 +291,6 @@
  "built-in-flash": {
   "photo": "right",
   "solid": true,
-  "z_min_mm": 77.0,
   "poly": [
    [
     230,
@@ -335,7 +334,14 @@
    ]
   ],
   "note": "head of the pop-up flash = front of the hump cap ahead of the hot shoe (y < 26 mm); hinge at its rear edge",
-  "y_max_mm": 26.0
+  "y_max_mm": 26.0,
+  "seam_curve": {
+   "x_centre": 69.2,
+   "half_width": 20.2,
+   "z_centre": 80.3,
+   "z_edge": 77.7,
+   "src": "Lower front seam of the pop-up head. 3/4 photo: the head's curved lower edge runs about 1 mm above the Canon wordmark (top z 79.3), so 80.3 mm at the centre; right photo: 77.7 mm at the housing side. The line at 82.2 mm in the front photo is the housing's top edge, not this seam. Measured 2026-11-18."
+  }
  },
  "eyecup": {
   "photo": "right",

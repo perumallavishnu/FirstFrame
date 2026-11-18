@@ -111,7 +111,7 @@
 
   const profile = {
     id: 'canon-eos-r100', manufacturer: 'Canon', model: 'EOS R100', displayName: 'Canon EOS R100',
-    modelUrl: 'assets/models/canon-eos-r100/Canon_EOS_R100.glb', mobileModelUrl: 'assets/models/canon-eos-r100/Canon_EOS_R100_mobile.glb', units: 'meters',
+    modelUrl: 'assets/models/canon-eos-r100/Canon_EOS_R100.glb', mobileModelUrl: 'assets/models/canon-eos-r100/Canon_EOS_R100_mobile.glb', units: 'meters', modelVersion: 2,
     lensRoots: { kit: 'R100_Lens_Kit' }, bodyRoot: 'R100_Body', screenMesh: 'SCREEN_Display',
     // mode dial in physical ring order (Canon Part Names, mode dial diagram); clockwise seen from above
     modeDial: ['A+', 'HYB', 'SCN', 'FX', 'MOV', 'M', 'Av', 'Tv', 'P'],

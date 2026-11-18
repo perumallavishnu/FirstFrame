@@ -212,6 +212,11 @@ The method is written up as a Claude Code skill in **[.claude/skills/camera-mode
 
 In a Claude Code session in this repo, ask for a camera by name (for example "add the Nikon Z50 II") and the skill takes it from there.
 
+To prepare a camera in advance, follow **[docs/NEW_CAMERA_INTAKE.md](docs/NEW_CAMERA_INTAKE.md)**. It gives you:
+- **fill-in-the-name research prompts** for specs, every part, the full menu, controls, hardware and lenses, each answer with source links;
+- **the list of official photos** to download;
+- **the folder layout** to drop the results into.
+
 ## Accuracy and honesty
 
 - **This is a learning simulator, not the real camera.** Exposure, depth of field, motion blur, noise and autofocus follow real optics and are good enough to learn from. Image quality, autofocus speed and menu depth are simplified.
