@@ -1,0 +1,14 @@
+# Vercel serves only the static app. Keep out:
+# Canon's copyrighted reference photos and manual files (local only)
+assets/models/*/reference/
+# model sources, build tools, docs and repo tooling (not needed at runtime)
+blender/
+docs/
+scripts/
+tests/
+intake/
+.claude/
+.tools/
+*.blend
+*.blend1
+README.md
