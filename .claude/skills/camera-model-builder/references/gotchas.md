@@ -22,6 +22,11 @@
 
 ## Blender build
 - **SVG icons:** run `addon_utils.enable("io_curve_svg")`, then `bpy.ops.import_curve.svg`. Delete the icon's invisible bounding-rectangle curve. Some glyphs fill wrongly (the "U" of MENU did); use plain text instead.
+- **Torn or thin wordmark** (user-reported on R100):
+  - **Thin:** Blender's default font looks nothing like a heavy brand mark. Fit a close heavy font to the box measured in the photo: 22.2 × 4.5 mm for R100.
+  - **Torn:** the flash-head cut at a flat z 77 ran through the logo, so `conform()` dropped glyph vertices into the seam gap. The fix was a curved seam measured from the 3/4 and side photos (80.3 mm at the centre, 77.7 mm at the sides).
+  - In a straight front photo, a sloped face shrinks to a thin line. The R100 line at 82.2 mm was the housing's top edge, not the seam. Read seams from the 3/4 view too.
+  - Always render a raking close-up of every printed mark.
 - **Text z-fighting:** set `fill_mode` to `FRONT` and depth to 0, subdivide, conform to the surface, and offset about 0.05 mm.
 - **Parenting with stale matrices:** call `view_layer.update()` before parenting while keeping the transform (the `parent_keep` helper). Don't let a search-and-replace make `parent_keep` call itself.
 - **Moving a parent's pivot drags its children.** Set the pivot first, then attach the children. The Speedlite window vanished this way.

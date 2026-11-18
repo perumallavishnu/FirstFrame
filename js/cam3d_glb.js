@@ -17,7 +17,8 @@
     const small = Math.min(screen.width || 9999, screen.height || 9999) < 700, lowMem = navigator.deviceMemory && navigator.deviceMemory <= 4;
     return !!(FF.camera.mobileModelUrl && (small || lowMem));
   };
-  G.url = () => (G.useMobile() ? FF.camera.mobileModelUrl : FF.camera.modelUrl);
+  // modelVersion busts the browser cache whenever the GLB is rebuilt
+  G.url = () => (G.useMobile() ? FF.camera.mobileModelUrl : FF.camera.modelUrl) + (FF.camera.modelVersion ? '?v=' + FF.camera.modelVersion : '');
   const DRACO = 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/';
   G.load = function (T3) {
     if (!gltfP) {

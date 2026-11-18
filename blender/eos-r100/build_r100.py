@@ -136,7 +136,7 @@ M = {
     "shoe": mat("MAT_Metal_HotShoe", (0.8, 0.8, 0.81), 0.22, metal=1.0),
     "steel": mat("MAT_Metal_Dark", (0.25, 0.25, 0.26), 0.35, metal=1.0),
     "gold": mat("MAT_Metal_Contacts", (0.95, 0.72, 0.32), 0.25, metal=1.0),
-    "print": mat("MAT_Print_White", (0.82, 0.83, 0.84), 0.5),
+    "print": mat("MAT_Print_White", (0.9, 0.9, 0.9), 0.5),
     "print_dark": mat("MAT_Print_Emboss", (0.035, 0.035, 0.037), 0.6),
     "red": mat("MAT_Print_Red", (0.62, 0.03, 0.03), 0.4),
     "screen": mat("MAT_Glass_Screen", (0.004, 0.004, 0.005), 0.06, coat=1.0),
@@ -255,14 +255,27 @@ def flat_from_curve(cu_obj, name, depth_mm):
     return me
 
 
-def text_mesh(name, body, size_mm, depth_mm=0.0, font_bold=False):
+def load_font(path):
+    """a system font by file path, or None when it isn't installed (the build then falls back to Blender's font)"""
+    try: return bpy.data.fonts.load(path, check_existing=True) if path and os.path.exists(path) else None
+    except Exception: return None
+
+
+def text_mesh(name, body, size_mm, depth_mm=0.0, font_bold=False, font=None, fit_w=None, spacing=1.0):
     cu = bpy.data.curves.new(name + "_txt", "FONT"); cu.body = body; cu.size = size_mm * mm * 1.38  # cap height ~ size
-    cu.align_x = "CENTER"; cu.align_y = "CENTER"
-    if font_bold:
+    cu.align_x = "CENTER"; cu.align_y = "CENTER"; cu.space_character = spacing
+    f = load_font(font)
+    if f: cu.font = f
+    elif font_bold:
         f = next((ff for ff in bpy.data.fonts if "Bold" in ff.name), None)
         if f: cu.font = f
     ob = bpy.data.objects.new(name + "_tmp", cu); bpy.context.scene.collection.objects.link(ob)
     me = flat_from_curve(ob, name, depth_mm); bpy.data.objects.remove(ob); bpy.data.curves.remove(cu)
+    if fit_w:  # scale to the measured width and cap height, centred (photo-measured wordmarks)
+        xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
+        cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+        sx, sy = fit_w * mm / (max(xs) - min(xs)), size_mm * mm / (max(ys) - min(ys))
+        me.transform(Matrix.Scale(sx, 4, (1, 0, 0)) @ Matrix.Scale(sy, 4, (0, 1, 0)) @ Matrix.Translation((-cx, -cy, 0)))
     return me
 
 
@@ -417,10 +430,11 @@ def conform(ob, n, lift=0.06, only=None):
         if best: v.co = inv @ (best[0] + n * lift * mm)
 
 
-def printed(name, face, a, b, body=None, icon=None, h=1.5, w=None, up=(0, 0, 1), m="print", parent=None, lift=0.03, at=None, nrm=None):
+def printed(name, face, a, b, body=None, icon=None, h=1.5, w=None, up=(0, 0, 1), m="print", parent=None, lift=0.03, at=None, nrm=None,
+            font=None, spacing=1.0):
     if at is None: loc, n, _ = hit(face, a, b)
     else: loc, n = at, nrm
-    me = text_mesh(name, body, h) if body else svg_mesh(name, icon, h, width_mm=w)
+    me = text_mesh(name, body, h, font=font, fit_w=w, spacing=spacing) if body else svg_mesh(name, icon, h, width_mm=w)
     ob = new_obj(name, me, "MATERIAL_DETAILS"); set_mat(ob, M[m]); orient(ob, loc + n * lift * mm, n, up)
     conform(ob, n, lift=max(lift, 0.05))
     if parent: parent_keep(ob, parent)
@@ -589,8 +603,9 @@ def build_front():
     af = m["af-lamp"]; loc, n, _ = hit("front", af["x"], af["z"])
     lamp = new_obj("PART_AfLamp", lathe("PART_AfLamp", [(0, -0.8), (2.25, -0.8), (2.25, 0.3), (1.6, 0.85), (0, 1.0)], 32), "FRONT_COMPONENTS"); set_mat(lamp, M["lamp"]); orient(lamp, loc, n, (0, 0, 1))
     anchor(lamp, "ANCHOR_AfLamp", loc + n * 1.0 * mm, n)
-    # front printing (plain type, not the Canon logotype)
-    printed("PRINT_FrontBrand", "front", 69.1, 76.6, body="Canon", h=4.2)
+    # front brand: measured in the front photo at 22.2 mm wide, 4.5 mm cap height, centred x 69.2, z 77.0.
+    # Set in a heavy serif (Bookman Old Style Bold) fitted to that box: a close match, not Canon's traced logotype.
+    printed("PRINT_FrontBrand", "front", 69.2, 77.0, body="Canon", h=4.5, w=22.2, font=r"C:\Windows\Fonts\BOOKOSB.TTF", spacing=0.92)
     printed("PRINT_FrontEOS", "front", 106.9, 58.6, body="EOS", h=3.2)
     # grip: anchor on the front of the covering
     loc, n, _ = hit("front", 15.0, 40.0, only=["PART_Grip"]); anchor(bpy.data.objects["PART_Grip"], "ANCHOR_Grip", loc, n)
@@ -676,7 +691,7 @@ def build_flash():
     zs = [v.co.z for v in fl.data.vertices]; ys = [v.co.y for v in fl.data.vertices]
     hinge = Vector((P(69.2, 0, 0).x, max(ys) - 0.8 * mm, max(zs) - 1.2 * mm))
     pivot_to(fl, hinge); motion(fl, "hinge", axis=(1, 0, 0), rng=[0, 0.95], open=0.95)
-    loc, n, _ = hit("front", 69.2, 80.0, only=["PART_BuiltInFlash"])
+    loc, n, _ = hit("front", 69.2, 81.0, only=["PART_BuiltInFlash"])  # head front band, between the curved seam (80.3) and its top (81.7)
     win = new_obj("PART_BuiltInFlash_Window", rbox("flashwin", 24.0, 2.6, 0.12, 0.4), "BUILT_IN_FLASH"); set_mat(win, M["flashwin"])
     orient(win, loc - n * 0.08 * mm, n, (0, 0, 1)); parent_keep(win, fl)
     loc, n, _ = hit("top", 69.2, 18.0, only=["PART_BuiltInFlash"]); anchor(fl, "ANCHOR_BuiltInFlash", loc, n)
