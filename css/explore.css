@@ -1,6 +1,6 @@
 /* explore.css: 3D camera page */
 .c3d-panel { margin-top: 16px; }
-.c3d-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+.c3d-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr); gap: 16px; align-items: start; }
 .c3d-left, .c3d-right { display: grid; gap: 12px; min-width: 0; }
 .c3d-bar { justify-content: space-between; gap: 8px; }
 .c3d-views { gap: 4px; }
@@ -34,11 +34,53 @@
 .dpad .u { grid-area: 1 / 2; } .dpad .l { grid-area: 2 / 1; } .dpad .c { grid-area: 2 / 2; font-size: .7rem; padding: 0; } .dpad .r { grid-area: 2 / 3; } .dpad .d { grid-area: 3 / 2; }
 .c3d-menuhelp { min-height: 4.2em; padding: 8px 10px; background: var(--surface2); border-radius: 8px; line-height: 1.45; }
 .c3d-mtabs { gap: 6px; margin-top: 8px; }
-.c3d-h { margin: 26px 0 4px; }
-.c3d-shelf { display: grid; grid-auto-flow: column; grid-auto-columns: 132px; gap: 10px; overflow-x: auto; padding: 6px 2px 12px; }
-.lensbtn { display: grid; gap: 2px; justify-items: center; padding: 8px; cursor: grab; text-align: center; font: inherit; color: inherit; }
-.lensbtn[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
-@media (max-width: 900px) { .c3d-grid { grid-template-columns: 1fr; } }
+.c3d-railnote { margin: 12px 0 0; }
 
 .c3d-guide { position: absolute; left: 0; top: 0; padding: 3px 8px; border-radius: 5px; background: rgba(255,178,36,.95); color: #111; font-size: 11.5px; font-weight: 700; white-space: nowrap; pointer-events: none; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
 .c3d-guide::before { content: ''; position: absolute; left: -6px; top: 8px; border: 4px solid transparent; border-right-color: rgba(255,178,36,.95); border-left: 0; }
+
+/* ---- lens rail: beside the camera box, same height, a reel whose middle lens is in focus ---- */
+.c3d-stagewrap { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+.c3d-rail { contain: size; display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
+  background: radial-gradient(120% 40% at 50% 50%, color-mix(in srgb, var(--accent) 9%, transparent) 0%, transparent 70%), linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); }
+.c3d-rail-head { display: flex; align-items: baseline; justify-content: space-between; padding: 12px 14px 8px; border-bottom: 1px solid var(--line); }
+.c3d-rail-k { font: 600 .95rem/1 var(--f-display); letter-spacing: .14em; text-transform: uppercase; }
+.c3d-rail-n { font-size: .8rem; color: var(--muted); }
+.c3d-rail-hint { margin: 0; padding: 10px 12px 12px; border-top: 1px solid var(--line); font-size: .74rem; line-height: 1.4; color: var(--muted); }
+.c3d-reel { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: stretch; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  scroll-snap-type: y mandatory; scrollbar-width: none; outline: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%); }
+.c3d-reel::-webkit-scrollbar { display: none; }
+.c3d-reel::before, .c3d-reel::after { content: ""; flex: 0 0 calc(50% - 64px); }
+.lensbtn { --k: 2; flex: 0 0 128px; display: grid; align-content: center; justify-items: center; gap: 2px; padding: 6px 8px; margin: 0; border: 0; border-radius: 10px;
+  background: transparent; color: var(--muted); font: inherit; text-align: center; cursor: grab; scroll-snap-align: center;
+  scale: calc(1 - min(var(--k), 2.2) * .2); opacity: max(.3, calc(1 - var(--k) * .3)); transform-origin: 50% 50%; will-change: scale, opacity; }
+.lensbtn:active { cursor: grabbing; }
+.lens-art { display: block; width: 116px; transition: translate var(--dur-2) var(--ease), filter var(--dur-2) var(--ease); }
+.lens-art svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lensbtn b { font: 600 1.02rem/1.1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+.lens-meta { font-size: .72rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.lens-on { display: none; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font: 600 .66rem/1.5 var(--f-display); letter-spacing: .12em; text-transform: uppercase; }
+.lensbtn[aria-pressed="true"] .lens-on { display: inline-block; }
+.lensbtn.is-focus { color: var(--ink); background: radial-gradient(70% 60% at 50% 40%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 75%); }
+.lensbtn.is-focus .lens-art { filter: drop-shadow(0 10px 14px rgba(0,0,0,.55)) drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 22%, transparent)); }
+.lensbtn:hover .lens-art { translate: 0 -3px; filter: brightness(1.18) drop-shadow(0 10px 14px rgba(0,0,0,.5)); }
+.lensbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+/* tablet: one column, the info and screen cards side by side below */
+@media (max-width: 1180px) {
+  .c3d-grid { grid-template-columns: minmax(0, 1fr); }
+  .c3d-right { position: static; max-height: none; overflow: visible; grid-template-columns: 1fr 1fr; align-items: start; }
+}
+/* phone: the rail turns into a horizontal reel under the camera */
+@media (max-width: 760px) {
+  .c3d-right { grid-template-columns: 1fr; }
+  .c3d-stagewrap { grid-template-columns: minmax(0, 1fr); }
+  .c3d-rail { order: 2; contain: none; }
+  .c3d-reel { flex-direction: row; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; min-height: 170px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 84%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 84%, transparent 100%); }
+  .c3d-reel::before, .c3d-reel::after { flex-basis: calc(50% - 64px); }
+  .lensbtn { flex: 0 0 128px; }
+}
+@media (prefers-reduced-motion: reduce) { .lens-art { transition: none; } }
