@@ -7,65 +7,50 @@
   <a href="#adding-more-cameras">Add a camera</a>
 </p>
 
-FirstFrame is a free, no-signup photography school built around a photo-accurate 3D **Canon EOS R100**, a typical first mirrorless camera. You can:
-- turn the camera over, press its buttons and open every door;
-- take the battery and card out and swap between ten lenses;
-- shoot simulated photos, and the app explains why each one came out the way it did.
+FirstFrame is a free website for learning how a camera works before you buy one. You practise on a 3D Canon EOS R100, a common first mirrorless camera, built from Canon's own photos and measurements. You can press its buttons, open its doors, change lenses and take practice photos. After each photo, the site tells you why it came out bright, dark, sharp or blurred.
 
-Everything runs in your browser. There's no account, no install and no tracking.
+It runs in your web browser. You don't need a camera, an account or any download, and nothing you do is tracked.
 
 ![FirstFrame home page](docs/images/home.jpg)
 
----
-
 ## What's new
-- **A cinematic look.** The palette borrows from a film set: stage black, warm silver-halide text and one tungsten accent, with a cool daylight rim light on the 3D stage, a fine film grain and a light theme behind the toggle. Details are in [DESIGN.md](DESIGN.md).
-- **A lens rail beside the camera.** All ten lenses sit in a reel on the left of the 3D view. Scroll over it to roll through them; the lens in the middle is large and lit, and its neighbours fade away. Drag a lens onto the camera or click to place it. On phones the rail becomes a swipeable strip under the camera.
-- **Smooth, fast scrolling.** Lenis on GSAP's clock, with themed scrollbars. Panels, the lens rail and 3D zoom keep their own scrolling, and visitors who ask for reduced motion get plain scrolling.
-- **A new logo and favicon.** A camera lens seen from the front: rubber ribbing, a machined metal ring, coated glass and the site's tungsten key light. It also comes as a web-app icon.
-- **A more accurate model.** The Canon wordmark is sized to Canon's photo, and the flash-head seam follows the real curve. There are real sockets behind the covers, the battery and SD card come fully out, and an optional Speedlite EL-100 sits on the hot shoe.
-- **Ready for more cameras.** There's a step-by-step skill for modelling any camera to the same accuracy, plus fill-in-the-name research prompts (see [Adding more cameras](#adding-more-cameras)).
+- The whole site has a darker, film-set look: black backgrounds, warm white text and one amber colour for anything you can click. There is still a light theme behind the toggle in the top corner.
+- The lenses now sit in a rail beside the 3D camera. Scroll over the rail to roll through them; the lens in the middle grows and lights up. Drag it onto the camera to fit it. On a phone the rail becomes a strip you swipe under the camera.
+- Scrolling is smoother and faster.
+- The site has a new logo: a camera lens seen from the front. It also shows in the browser tab and on a phone home screen.
+- The camera model is more accurate. The Canon name on the front matches Canon's photo, the sockets behind the side covers are real, and the battery and SD card come all the way out.
+- Search engines and AI search tools can now read what the site is about, and shared links show a proper preview card.
 
 ## Who it is for
-- **You want a camera but have never used one.** Learn what aperture, shutter speed, ISO and focus do before you spend money.
-- **You're deciding what to buy.** Hold a beginner body in 3D, look at every port and control, and try ten real lenses to see what each one is for.
-- **You already have a camera.** If its buttons and menus confuse you, practise here without wasting shots.
-- **You teach photography.** Use it as a free shared sandbox that every student can open without an account.
-
-You don't need a camera, an account or an installation. Progress and photos stay in your own browser.
+- People who want to buy a first camera and understand it first.
+- People who own a camera but find its buttons and menus confusing.
+- Teachers who want a free practice tool that students can open without signing up.
 
 ## What you'll understand before you buy
 
-| Topic | Where |
+| Topic | Where to find it |
 |---|---|
-| **The exposure triangle:** how aperture, shutter speed and ISO trade against each other | Simulator, Academy lessons 3–7 |
-| **The shooting modes:** what Auto, P, Tv, Av and M really do, and when to leave Auto | Simulator mode dial, lesson 8 |
-| **Focus:** One-Shot vs Servo AF, AF points, manual focus and depth of field | Simulator Focus and Depth tabs, lessons 4 and 10 |
-| **Metering and histograms:** why backlit faces go dark and how to fix them | Lesson 9, mission *Rescue the silhouette* |
-| **White balance, picture styles, and RAW vs JPEG** | Lessons 11 and 15 |
-| **Lenses:** focal length, crop factor, wide vs tele, primes vs zooms | Lens rail, Lenses & Gear, lesson 12 |
-| **The physical camera:** every button, dial, door and port, with Canon's official names | 3D Camera |
-| **Handling:** how the battery and SD card go in, what the ports are for, how a flash mounts | 3D Camera |
+| How aperture, shutter speed and ISO work together | Simulator, Academy lessons 3 to 7 |
+| What the Auto, P, Tv, Av and M modes do | Simulator mode dial, lesson 8 |
+| Focus, depth of field and a blurred background | Simulator, lessons 4 and 10 |
+| Why backlit faces go dark, and how to read a histogram | Lesson 9, mission *Rescue the silhouette* |
+| White balance, picture styles, and RAW versus JPEG | Lessons 11 and 15 |
+| Focal length, crop factor and which lens suits what | Lens rail, Lenses & Gear, lesson 12 |
+| The name and job of every button, dial and port | 3D Camera |
+| How the battery and card go in, and how a flash fits | 3D Camera |
 
 ## A tour of the app
 
 ### 3D Camera: hold the EOS R100
 ![The 3D camera explorer with the lens rail](docs/images/explorer.jpg)
 
-- **Rotate, zoom and click any of 57 parts.** Each part has:
-  - its official Canon name;
-  - a plain-language explanation;
-  - what is printed on it;
-  - a link to the matching lesson.
-
-  The camera turns to face the part you pick, and a guided tour walks through them in order.
-- **Press the real controls.** Flip the power switch, turn the mode dial, raise the flash, press MENU and use the cross keys. The **rear screen runs a working copy of the camera's menu**, and changes there apply everywhere in the app.
-- **Choose a lens from the rail.** Roll the reel, then drag the focused lens onto the mount. The zoom ring turns, and the iris opens and closes with the f-number. Click the lens release button to take it off again.
-- **Open every door:**
-  - **Terminal covers:** USB-C, micro-HDMI, a 3.5 mm microphone jack and the remote jack, modelled to their real connector sizes.
-  - **Card and battery door:** take the **LP-E17 battery** and the **SD card** right out. Guides show which way each goes back in.
-- **Add a Speedlite EL-100** to the hot shoe, tilt it for bounce flash, and watch it fire with the shutter.
-- **See inside:** X-ray and exploded views show the sensor, shutter and internal parts.
+- Turn the camera around and zoom in. Click any of its 57 parts to see Canon's name for it, what it does, what is printed on it, and the lesson that explains it. The guided tour visits each part in turn.
+- Press the controls: the power switch, the mode dial, the flash, MENU and the arrow keys. The screen on the back runs a copy of the camera's menu, and whatever you change there also changes in the simulator.
+- Pick a lens from the rail on the left and drag it onto the camera. The zoom ring turns, and the opening inside the lens gets bigger or smaller as you change the f-number. Press the lens release button to take it off.
+- Open the side covers to see the USB-C, micro-HDMI, microphone and remote sockets, each made to its real size.
+- Open the bottom door and take out the LP-E17 battery and the SD card. Arrows show which way round each one goes back in.
+- Put a Speedlite EL-100 flash on top, tilt its head to bounce the light, and watch it fire when you press the shutter.
+- Switch on X-ray or slide the exploded view to see the sensor, the shutter and other parts inside.
 
 | Ports behind the covers | Battery and SD card out | Speedlite on the hot shoe |
 |---|---|---|
@@ -75,16 +60,10 @@ You don't need a camera, an account or an installation. Progress and photos stay
 ### Simulator: take pictures and see why they look that way
 ![The camera simulator](docs/images/simulator.jpg)
 
-- **Eleven scenes, each built to teach something.** They include a spinning fan, a waterfall, a passing car, a candlelit table and a night street, plus 3D scenes in a concert hall, on a Venice lagoon and at Potsdamer Platz.
-- **A real viewfinder:** live exposure readouts and a live histogram. Click to place the AF point, and half-press to focus.
-- **Every setting a beginner needs:** mode, aperture, shutter, ISO and Auto ISO, exposure compensation, metering, AE lock, focus mode, AF area, white balance, picture style, drive, flash, stabilisation and zoom.
-- **The photo follows the physics.**
-  - Motion blur comes from your shutter speed.
-  - Background blur comes from your aperture and distance.
-  - Grain comes from ISO.
-  - Highlights blow out when you over-expose.
-
-  Each shot gets an analysis of what went right and what to change.
+- Eleven scenes, each set up to teach one thing: a spinning fan, a waterfall, a passing car, a candlelit table, a night street, and 3D scenes in a concert hall, on a Venice lagoon and at Potsdamer Platz.
+- A viewfinder with live exposure numbers and a histogram. Click to choose where to focus, then half-press the shutter.
+- All the settings a beginner needs, from aperture, shutter speed and ISO to white balance, focus mode, drive and flash.
+- The photo behaves like a real one. A slow shutter blurs movement, a wide aperture blurs the background, a high ISO adds grain, and too much light washes out the bright parts. After each shot you get a short note on what worked and what to change.
 
 ### Academy: 15 short lessons
 ![Academy lessons](docs/images/academy.jpg)
@@ -135,20 +114,16 @@ This page covers the R100's specifications in plain words, what it is good and b
 ### Glossary and Portfolio
 ![Glossary](docs/images/glossary.jpg)
 
-- **Glossary:** 40 photography words in plain language, searchable.
-- **Portfolio:** your simulated photos, kept in your browser with their settings and feedback.
+The glossary explains 40 photography words in plain language, and you can search it. The portfolio keeps your practice photos in your browser, with the settings you used and the feedback you got.
 
 ### On tablets and phones
 ![FirstFrame on a tablet](docs/images/tablet.jpg)
 
-The layout is redesigned for smaller screens, not just squeezed:
-- **Tablets:** the info and rear-screen cards move below the camera.
-- **Phones:** the lens rail becomes a swipe strip.
-- **Lighter model:** phones and low-memory devices get a lighter 3D model automatically.
+On a tablet, the part details and the camera screen move below the 3D view. On a phone, the lens rail turns into a strip you swipe, and a lighter 3D model loads so the page stays quick.
 
 ## A path if you're thinking of buying a camera
 1. **3D Camera:** take the guided tour, so you know what each button is called and where it is.
-2. **Academy lessons 1–3:** learn the exposure triangle.
+2. **Academy lessons 1 to 3:** learn the exposure triangle.
 3. **Simulator in Av mode:** shoot the *Golden Hour Portrait* at f/4.5 and then f/11, and compare the backgrounds.
 4. **Simulator in Tv mode:** shoot the *Spinning Fan* at 1/30 s and then 1/1000 s.
 5. **Missions:** try *Freeze the fan*, *Creamy background* and *Candlelight, no flash*. These are the situations that make people upgrade from a phone.
@@ -208,6 +183,7 @@ node scripts/validate-camera-profile.js
 | App shell, routing, pages | `index.html`, `js/app.js`, `js/pages.js`, `js/landing.js` |
 | **Theme and motion** | `css/theme.css` (palette, grain, scrollbars, reveals), `js/smooth.js` (GSAP clock + Lenis), [DESIGN.md](DESIGN.md) |
 | **Brand** | `assets/brand/lens-logo.svg`, `favicon.svg`, `icon-*.png`, `apple-touch-icon.png`, `site.webmanifest` |
+| Search and sharing | `<head>` of `index.html` (title, description, Open Graph, JSON-LD), the About section in `index.html`, `robots.txt`, `sitemap.xml`, `llms.txt`, `favicon.ico`, `assets/brand/og-image.jpg` |
 | Camera state, exposure solver, autofocus | `js/cam_core.js`, `js/physics.js`, `js/params.js` |
 | **One action dispatcher for every control** | `js/cam_actions.js` ([docs](docs/CAMERA_ACTIONS.md)) |
 | Image renderer (WebGL2) and scenes | `js/gl_*.js`, `js/render*.js`, `js/scenes3d.js` |
@@ -233,7 +209,7 @@ The camera isn't modelled by eye.
 
 | Check | Result |
 |---|---|
-| Outline vs Canon's photos | 93–97% match in every view |
+| Outline vs Canon's photos | 93 to 97% match in every view |
 | Lens lengths (photo profiles) | within 1 mm of Canon's specs |
 | USB-C / micro-HDMI openings | 8.34 × 2.56 mm / 6.4 × 2.8 mm |
 | LP-E17 battery / SD card | 33.0 × 14.0 × 49.4 mm / 24 × 32 × 2.1 mm |

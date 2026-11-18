@@ -73,7 +73,7 @@
       else if (r.v === 'portfolio') FF.pages.portfolio(el);
       else if (r.v === 'glossary') FF.pages.glossary(el);
     } catch (e) { console.error(e); el.replaceChildren(h('div', { class: 'callout warn' }, 'Something went wrong drawing this page: ' + e.message)); }
-    document.title = 'FirstFrame · ' + (r.v === 'lesson' ? (FF.lessons.byId(r.id) || { title: 'Lesson' }).title : r.v[0].toUpperCase() + r.v.slice(1));
+    document.title = r.v === 'home' ? 'FirstFrame: Learn Photography Free on a 3D Canon EOS R100' : 'FirstFrame · ' +(r.v === 'lesson' ? (FF.lessons.byId(r.id) || { title: 'Lesson' }).title : r.v[0].toUpperCase() + r.v.slice(1));
     if (r.v !== 'simulator') { if (FF.scroll) FF.scroll.to(0, { immediate: true }); else window.scrollTo(0, 0); }
   }
   window.addEventListener('hashchange', route);

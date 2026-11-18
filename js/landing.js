@@ -88,7 +88,8 @@
       h('p', null, 'FirstFrame is an independent learning tool. It models one real camera, the Canon EOS R100, because it is a common first camera with a full set of manual controls. It is not made by or affiliated with Canon.'),
       h('p', null, 'The optics are calculated: exposure, depth of field, motion blur, noise and diffraction follow the real formulas. The 3D models and scenes are built by hand from simple shapes, so they teach accurately but do not look like photographs.')),
       h('div', { class: 'row' }, h('a', { class: 'btn primary', href: '#simulator' }, 'Pick up the camera'), h('a', { class: 'btn', href: '#camera' }, 'Explore it in 3D'), h('a', { class: 'btn', href: '#academy' }, 'Start lesson 1')));
-    root.replaceChildren(h('div', { class: 'lp' }, stageEl, course, practice, missions, honest));
+    const about = root.querySelector('.seo-about'); // plain-HTML About section from index.html: kept, moved below the landing
+    root.replaceChildren(h('div', { class: 'lp' }, stageEl, course, practice, missions, honest), ...(about ? [about] : []));
     // sections rise into place once, as they enter
     const items = root.querySelectorAll('.lp-head > *, .lp-part, .lp-scene, .lp-missions li, .lp-note > *'); items.forEach((el) => { el.classList.add('rise'); el.style.setProperty('--i', Array.prototype.indexOf.call(el.parentNode.children, el) % 8); });
     if ('IntersectionObserver' in window) { const io = new IntersectionObserver((en) => en.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { rootMargin: '0px 0px -8% 0px' }); items.forEach((el) => io.observe(el)); } else items.forEach((el) => el.classList.add('in'));
