@@ -1,0 +1,21 @@
+# FirstFrame
+
+> A free website for learning how a camera works before you buy one. It has a 3D model of the Canon EOS R100 built from Canon's photos and published measurements, a camera simulator that explains each photo, 15 short lessons and 9 photo missions. No account, nothing to install.
+
+## Sections
+- [Home](https://firstframe-phi.vercel.app/): what FirstFrame is, who it is for and how a beginner should start.
+- [3D Camera](https://firstframe-phi.vercel.app/#camera): rotate the EOS R100, click any of its 57 parts for Canon's name and what it does, open the doors and change lenses.
+- [Simulator](https://firstframe-phi.vercel.app/#simulator): take practice photos in 11 scenes with real aperture, shutter speed, ISO, focus and white balance settings.
+- [Academy](https://firstframe-phi.vercel.app/#academy): 15 lessons from the exposure triangle to RAW versus JPEG, each with an interactive lab and a quiz.
+- [Missions](https://firstframe-phi.vercel.app/#missions): 9 challenges such as freezing a fan, blurring a background and shooting by candlelight.
+- [Lenses & Gear](https://firstframe-phi.vercel.app/#gear): the camera's specifications in plain words and ten lenses explained by what they are for.
+- [Glossary](https://firstframe-phi.vercel.app/#glossary): 40 photography terms in plain language.
+
+## Facts
+- The camera model matches Canon's published size of 116.3 x 85.5 x 68.8 mm, and its outline matches Canon's photos at 93 to 97 percent in every view.
+- The simulator covers P, Tv, Av, M, A+ and three scene modes.
+- Progress and photos are stored only in the visitor's browser. There is no tracking.
+- FirstFrame is independent and not affiliated with Canon Inc.
+
+## Source code
+- https://github.com/perumallavishnu/FirstFrame

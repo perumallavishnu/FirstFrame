@@ -92,3 +92,16 @@ input[type="range"] { accent-color: var(--accent); }
 .brand-mark { width: 28px; height: 28px; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); transition: rotate var(--dur-3) var(--ease); }
 .brand:hover .brand-mark { rotate: 30deg; }
 @media (prefers-reduced-motion: reduce) { .brand-mark { transition: none; } }
+
+/* ---- About FirstFrame (plain HTML in index.html, kept below the landing) ---- */
+.seo-hero { padding: 40px 0 10px; } .seo-hero h1 { max-width: 16ch; } .seo-hero p { max-width: 62ch; font-size: 1.12rem; color: var(--muted); }
+.seo-about { margin: 72px 0 24px; padding-top: 40px; border-top: 1px solid var(--line); }
+.seo-about > h2 { margin-bottom: 28px; }
+.seo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 18px 40px; }
+.seo-grid section { padding: 4px 0 18px; border-bottom: 1px solid var(--line); }
+.seo-grid h3 { margin: 0 0 10px; font-size: 1.32rem; text-transform: uppercase; letter-spacing: .02em; }
+.seo-grid p, .seo-grid li { color: var(--muted); font-size: 1rem; line-height: 1.6; max-width: 62ch; }
+.seo-grid ul, .seo-grid ol { margin: 0; padding-left: 1.2em; } .seo-grid li { margin: 4px 0; }
+.seo-grid li::marker { color: var(--accent); }
+.seo-grid a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.seo-grid a:hover { color: var(--accent); }

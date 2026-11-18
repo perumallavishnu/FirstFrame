@@ -1,0 +1,5 @@
+# FirstFrame is a free learning site. Search engines and AI search crawlers are welcome.
+User-agent: *
+Allow: /
+
+Sitemap: https://firstframe-phi.vercel.app/sitemap.xml
