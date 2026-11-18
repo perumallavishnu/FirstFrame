@@ -87,3 +87,8 @@ input[type="range"] { accent-color: var(--accent); }
   .view.on, .view.on .page-head h1, .view.on .page-head .lead { animation: none; }
   .nav a::after, .btn { transition: none; }
 }
+
+/* brand mark: the lens logo */
+.brand-mark { width: 28px; height: 28px; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,.5)); transition: rotate var(--dur-3) var(--ease); }
+.brand:hover .brand-mark { rotate: 30deg; }
+@media (prefers-reduced-motion: reduce) { .brand-mark { transition: none; } }
