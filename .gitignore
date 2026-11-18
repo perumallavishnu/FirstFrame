@@ -25,3 +25,4 @@ node_modules/
 
 # new-camera intake: maker photos and manuals (copyright); see docs/NEW_CAMERA_INTAKE.md
 intake/
+.vercel
