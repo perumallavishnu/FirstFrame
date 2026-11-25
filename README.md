@@ -273,4 +273,4 @@ There's no account, sign-up, analytics or tracking. Lesson progress, mission sta
 - **Blender skill pack:** [arjun988/blender-skills](https://github.com/arjun988/blender-skills) (MIT), in `.claude/skills/`.
 
 ## Licence
-No licence has been chosen yet, so all rights are reserved by the author for now. Open an issue if you'd like to use or contribute to the project.
+Released under the [MIT licence](LICENSE): free to use, change and share with the copyright notice kept. Bundled third-party work and Canon's trademarks and designs are not covered; see [THIRD-PARTY.md](THIRD-PARTY.md).
